@@ -24,10 +24,10 @@ async def identification(file: UploadFile = File(...)):
 
     En esta ruta vamos a recibir las identificaciones
     """
-    async with aiofiles.open("tmp.jpg", 'wb') as out_file:
+    async with aiofiles.open("app/tmp.jpg", 'wb') as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
-        aux = id.ineToJson("tmp.jpg")
+        aux = id.ineToJson("app/tmp.jpg")
         print(aux)
         return aux
 

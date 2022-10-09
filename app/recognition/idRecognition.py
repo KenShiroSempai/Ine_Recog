@@ -98,7 +98,7 @@ def template(img):
     ape = ""
     flag = False
 
-    template = cv2.imread('templates/template_0.jpeg')
+    template = cv2.imread('app/templates/template_0.jpeg')
     pointEle = (488, 423)
     pointEle2 = (784, 461)
     pointNam = (290, 180)
@@ -115,9 +115,9 @@ def template(img):
         pointNam,
         pointNam2
     )
-    cv2.imwrite("imgAPI/cut.jpg", aligned)
-    cv2.imwrite('imgAPI/aligned.jpg', matchedVis)
-    cv2.imwrite("imgAPI/final.jpg", finalImage)
+    cv2.imwrite("app/imgAPI/cut.jpg", aligned)
+    cv2.imwrite('app/imgAPI/aligned.jpg', matchedVis)
+    cv2.imwrite("app/imgAPI/final.jpg", finalImage)
     name = name.split()
     if "NOMBRE" in name:
         name.remove("NOMBRE")
@@ -173,7 +173,7 @@ def template1(img):
     ape = ""
     flag = False
 
-    template = cv2.imread('templates/-1.jpeg')
+    template = cv2.imread('app/templates/-1.jpeg')
     pointEle = (500, 438)
     pointEle2 = (784, 476)
     pointNam = (315, 175)
@@ -190,9 +190,9 @@ def template1(img):
         pointNam,
         pointNam2
     )
-    cv2.imwrite("imgAPI/final.jpg", finalImage)
-    cv2.imwrite("imgAPI/cut.jpg", aligned)
-    cv2.imwrite('imgAPI/aligned.jpg', matchedVis)
+    cv2.imwrite("app/imgAPI/final.jpg", finalImage)
+    cv2.imwrite("app/imgAPI/cut.jpg", aligned)
+    cv2.imwrite('app/imgAPI/aligned.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if (len(name[0]) < 3):
