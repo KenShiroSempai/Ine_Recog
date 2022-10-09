@@ -4,6 +4,7 @@ Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
 from fastapi import FastAPI, File, UploadFile, responses
 import aiofiles
+import recognition.idRecognition as id
 
 app = FastAPI()
 
@@ -23,12 +24,12 @@ async def identification(file: UploadFile = File(...)):
 
     En esta ruta vamos a recibir las identificaciones
     """
-    print(type(file.file))
     async with aiofiles.open("tmp.jpg", 'wb') as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
-
-    return {"": file.filename}
+        aux = id.ineToJson("tmp.jpg")
+        print(aux)
+        return aux
 
 
 @app.get("/results/{photo}")
