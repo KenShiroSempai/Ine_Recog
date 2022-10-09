@@ -44,5 +44,5 @@ async def returnImg(photo):
     except Exception as ex:
         return {"error": ex.args}
     if ((num < 5) and (num > -1)):
-        return responses.FileResponse(f"imgAPI/{photo}.jpg")
+        return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}

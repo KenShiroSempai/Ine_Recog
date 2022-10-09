@@ -223,10 +223,11 @@ def ineToJson(path):
     img = cv2.imread(path)
     js = {}
     try:
-        print("uno")
+        print("1")
         js = template1(img)
     except Exception as ex:
         try:
+            print("2")
             js = template(img)
             print(ex)
         except Exception as ex:
