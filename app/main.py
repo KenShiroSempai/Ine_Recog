@@ -4,7 +4,7 @@ Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
 from fastapi import FastAPI, File, UploadFile, responses
 import aiofiles
-import recognition.idRecognition as id
+import app.recognition.idRecognition as id
 
 app = FastAPI()
 
