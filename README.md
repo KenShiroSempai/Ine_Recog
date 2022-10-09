@@ -6,3 +6,5 @@ para activarlo:
 source .fastApi/bin/activate
 
 uvicorn main:app --host 192.168.100.140 --port 4999
+
+git clone https://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@github.com/guyacamole/fastAPI.git
