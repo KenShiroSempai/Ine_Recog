@@ -115,9 +115,9 @@ def template(img):
         pointNam,
         pointNam2
     )
-    cv2.imwrite("app/imgAPI/cut.jpg", aligned)
-    cv2.imwrite('app/imgAPI/aligned.jpg', matchedVis)
-    cv2.imwrite("app/imgAPI/final.jpg", finalImage)
+    cv2.imwrite("app/imgAPI/2.jpg", aligned)
+    cv2.imwrite('app/imgAPI/1.jpg', matchedVis)
+    cv2.imwrite("app/imgAPI/3.jpg", finalImage)
     name = name.split()
     if "NOMBRE" in name:
         name.remove("NOMBRE")
@@ -190,9 +190,9 @@ def template1(img):
         pointNam,
         pointNam2
     )
-    cv2.imwrite("app/imgAPI/final.jpg", finalImage)
-    cv2.imwrite("app/imgAPI/cut.jpg", aligned)
-    cv2.imwrite('app/imgAPI/aligned.jpg', matchedVis)
+    cv2.imwrite("app/imgAPI/2.jpg", finalImage)
+    cv2.imwrite("app/imgAPI/1.jpg", aligned)
+    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if (len(name[0]) < 3):
