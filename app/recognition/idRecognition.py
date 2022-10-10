@@ -99,10 +99,10 @@ def template(img):
     flag = False
 
     template = cv2.imread('app/templates/-2.jpeg')
-    pointEle = (488, 423)
-    pointEle2 = (784, 461)
-    pointNam = (290, 180)
-    pointNam2 = (655, 293)
+    pointEle = (488, 403)
+    pointEle2 = (784, 446)
+    pointNam = (300, 160)
+    pointNam2 = (665, 273)
 
     aligned, matchedVis = imageAlignment(image=img, template=template)
     elector, image = extractText(
