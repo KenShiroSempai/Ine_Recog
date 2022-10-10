@@ -98,7 +98,7 @@ def template(img):
     ape = ""
     flag = False
 
-    template = cv2.imread('app/templates/template_1.jpeg')
+    template = cv2.imread('app/templates/template_0.jpeg')
     pointEle = (488, 423)
     pointEle2 = (784, 461)
     pointNam = (290, 180)
