@@ -102,7 +102,7 @@ def template(img):
     pointEle = (488, 403)
     pointEle2 = (784, 446)
     pointNam = (300, 160)
-    pointNam2 = (665, 273)
+    pointNam2 = (665, 279)
 
     aligned, matchedVis = imageAlignment(image=img, template=template)
     elector, image = extractText(
