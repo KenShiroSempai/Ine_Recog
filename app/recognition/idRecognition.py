@@ -115,9 +115,9 @@ def template(img):
         pointNam,
         pointNam2
     )
+    cv2.imwrite("app/imgAPI/2.jpg", finalImage)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
-    cv2.imwrite('app/imgAPI/2.jpg', matchedVis)
-    cv2.imwrite("app/imgAPI/3.jpg", finalImage)
+    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
     name = name.split()
     if "NOMBRE" in name:
         name.remove("NOMBRE")
