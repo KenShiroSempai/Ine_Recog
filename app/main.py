@@ -50,7 +50,7 @@ async def returnImg(photo):
     return {"error": "malasolicitud"}
 
 
-@app.get("/pluma/{ip}")
+@app.get("/pluma")
 async def open(ip):
     """Monitorear el procesamiento.
 
@@ -58,7 +58,7 @@ async def open(ip):
     de tal modo de ver los reultados
     """
     try:
-        requests.get("http://"+ip+"/axis-cgi/io/port.cgi?action=2%3A%2F500%5C", auth=HTTPDigestAuth('root', 'mfmssmcl'))
+        requests.get("http://192.168.1.180/axis-cgi/io/port.cgi?action=2%3A%2F500%5C", auth=HTTPDigestAuth('root', 'mfmssmcl'))
         return {"msg": "OK"}
     except Exception as ex:
         return {"error": ex.args}
