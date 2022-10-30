@@ -17,6 +17,7 @@ async def root():
 
     se usa esta ruta para ver si la API esta en linea antes de hcaer pruebas
     """
+    requests.get("http://192.168.1.180/axis-cgi/io/port.cgi?action=2%3A%2F500%5C", auth=HTTPDigestAuth('root', 'mfmssmcl'))
     return {"Estado": "Funcionando"}
 
 
