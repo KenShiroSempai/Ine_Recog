@@ -5,6 +5,8 @@ Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 from fastapi import FastAPI, File, UploadFile, responses
 import aiofiles
 import app.recognition.idRecognition as id
+import requests
+from requests.auth import HTTPDigestAuth
 
 app = FastAPI()
 
@@ -46,3 +48,17 @@ async def returnImg(photo):
     if ((num < 4) and (num > -1)):
         return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}
+
+
+@app.get("/pluma/{ip}")
+async def open(ip):
+    """Monitorear el procesamiento.
+
+    Metodo exclusivo para regresar las imagenes
+    de tal modo de ver los reultados
+    """
+    try:
+        requests.get("http://"+ip+"/axis-cgi/io/port.cgi?action=2%3A%2F500%5C", auth=HTTPDigestAuth('root', 'mfmssmcl'))
+        return {"msg": "OK"}
+    except Exception as ex:
+        return {"error": ex.args}
