@@ -6,4 +6,4 @@ services:
     ports:
       - "4999:8000"
     volumes:
-        - /mnt/disk2/patron:app/qr/
+        - /mnt/disk2/patron:/app/qr/

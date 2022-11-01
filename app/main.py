@@ -7,8 +7,16 @@ import aiofiles
 import app.recognition.idRecognition as id
 import requests
 from requests.auth import HTTPDigestAuth
+from pydantic import BaseModel
+import qrcode
+from PIL import Image
 
 app = FastAPI()
+
+
+class Item(BaseModel):
+    url: str
+
 
 
 @app.get("/")
@@ -63,3 +71,15 @@ async def returnImg(photo):
         return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}
 
+
+@app.post("/qr/")
+async def create_item(item: Item):
+    if item.url:
+        QRcode = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
+        url = item.url
+        QRcode.add_data(url)
+        QRcode.make
+        QRimg = QRcode.make_image(fill_color='Black', back_color='White').convert('RGB')
+        QRimg = QRimg.resize((1000,1000),Image.ANTIALIAS)
+        QRimg.save(r'app/qr/QrWhats.png')
+    return {"msg": "too cool "}
