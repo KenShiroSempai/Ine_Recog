@@ -15,24 +15,9 @@ app = FastAPI()
 async def root():
     """Ruta defaul.
 
-    se usa esta ruta para ver si la API esta en linea antes de hcaer pruebas
+    se usa esta ruta para ver si la API esta en linea antes de hacer pruebas
     """
-    # requests.get("http://192.168.1.180/axis-cgi/io/port.cgi?action=2%3A%2F500%5C", auth=HTTPDigestAuth('root', 'mfmssmcl'))
     return {"Estado": "Funcionando"}
-
-
-@app.get("/pluma/")
-async def open():
-    """Monitorear el procesamiento.
-
-    Metodo exclusivo para regresar las imagenes
-    de tal modo de ver los reultados
-    """
-    try:
-        requests.get("http://192.168.1.180/axis-cgi/io/port.cgi?action=2%3A%2F500%5C", auth=HTTPDigestAuth('root', 'mfmssmcl'))
-    except Exception as ex:
-        return {"error": ex.args}
-    return {"msg": "OK"}
 
 
 @app.get("/plumas/{ip}")
@@ -63,7 +48,7 @@ async def identification(file: UploadFile = File(...)):
         return aux
 
 
-@app.get("/results/{photo}")
+@app.get("/img/{photo}")
 async def returnImg(photo):
     """Monitorear el procesamiento.
 
@@ -77,3 +62,4 @@ async def returnImg(photo):
     if ((num < 4) and (num > -1)):
         return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}
+

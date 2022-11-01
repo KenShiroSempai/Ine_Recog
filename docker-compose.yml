@@ -5,3 +5,5 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0
     ports:
       - "4999:8000"
+    volumes:
+        - /mnt/disk2/patron:app/qr/
