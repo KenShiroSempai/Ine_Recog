@@ -7,3 +7,4 @@ services:
       - "4999:8000"
     volumes:
         - /mnt/disk2/patron:/app/app/qr
+        - /mnt/disk0/images:/app/app/pai
