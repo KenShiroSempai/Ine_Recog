@@ -105,7 +105,7 @@ async def abrir_plumas(item: Item):
     """
     url = "http://"+item.url+"/axis-cgi/io/port.cgi?action=2%3A%2F500%5C"
     try:
-        requests.get(url, auth=HTTPDigestAuth('root', 'mfmssmcl'))
+        requests.get(url, auth=HTTPDigestAuth('root', 'mfmssmcl'), timeout=1)
     except Exception as ex:
         return {"error": ex.args}
     return {"msg": "OK"}
