@@ -14,6 +14,7 @@ import pathlib
 import os
 import cv2
 from typing import List
+from csv import writer
 
 app = FastAPI()
 
@@ -25,7 +26,7 @@ class Item(BaseModel):
     parametros sea mas sencillo.
     """
 
-    url: str
+    url: str    # String del cual se va a generar el QR
 
 
 class foto(BaseModel):
@@ -35,8 +36,22 @@ class foto(BaseModel):
     parametros sea mas sencillo.
     """
 
-    url: str
-    path: str
+    url: str    # IP de la camara con la que tomara foto
+    path: str   # Nombre con el que se va  a guardar la foto
+
+
+class rfid(BaseModel):
+    """Objeto creado para los parametros de TAG fallido
+
+    Guardara los parametros necesarios para llevar el registro de tags leidos
+    con la sunmi ya que esta solo se debe de usar cuando la antena no lo
+    detecto
+    """
+
+    tag: str        # Tag leido
+    timestamp: str  # Tiempo en el que el tag fue tomado
+    ip: str         # Ip de la camara que tomara foto
+    salida: str     # Nombre de la pluma que se abrio
 
 
 @app.get("/")
@@ -49,7 +64,7 @@ async def root():
 
 
 @app.post("/upload")
-async def identification(file: UploadFile = File(...)):
+async def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
 
     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
@@ -63,7 +78,7 @@ async def identification(file: UploadFile = File(...)):
 
 
 @app.get("/img/{photo}")
-async def get_Img(photo):
+async def retorna_Img(photo):
     """Monitorear el procesamiento.
 
     Metodo exclusivo para regresar las imagenes
@@ -79,7 +94,7 @@ async def get_Img(photo):
 
 
 @app.post("/qr/")
-async def create_qrImg(item: Item):
+async def create_whatsQr(item: Item):
     """Generador de QR.
 
     Metodo para uso exclusivo del bot de whatsapp, recibe un string y genera
@@ -97,7 +112,7 @@ async def create_qrImg(item: Item):
 
 
 @app.post("/plumas/")
-async def abrir_plumas(item: Item):
+async def abrir_pluma(item: Item):
     """Abrir plumas de emergencia.
 
     Metodo creado para abrir plumas, recibe una ip y manda el pulso
@@ -112,7 +127,7 @@ async def abrir_plumas(item: Item):
 
 
 @app.get("/delete/")
-async def create_item():
+async def borrar_whatsQr():
     """Borrar Qr generado.
 
     Metodo para uso exclusivo de el bot de whatsapp, borra la imagen que este
@@ -145,3 +160,36 @@ async def tomar_foto(item: List[foto]):
             cv2.imwrite("app/pai/"+path, frames)
             msg = "toocol"
     return {"msg": msg}
+
+
+@app.post("/rfid/")
+async def tag_defectuoso(item: rfid):
+    """Recibe los detalles de un tag defectuoso.
+
+    Registramos todos los parametros para llevar un control de los tag
+    defectuosos
+    """
+    lista = []
+    # Extraemos los datos del cuerpo del post
+    tag = item.tag
+    timestamp = item.timestamp
+    ip = item.ip
+    salida = item.salida
+    # Con el cuerpo del post, tomaremos una foto
+    url = "rtsp://root:mfmssmcl@"+ip+"/axis-media/media.amp"
+    cap = cv2.VideoCapture(url)
+    ret, frames = cap.read()
+    # verificamos que la camara se abrio con exito
+    if not ret:
+        # si no se abrio bien, hacemos el registro sin foto
+        foto = "Hubo un error al acceder a la camara"
+    else:
+        # si se abrio bien, tomamos la foto y guardamos el registro
+        foto = salida+"_"+timestamp+"_"+tag+".jpg"
+        cv2.imwrite("app/Castrosa/img/"+foto, frames)
+    lista.extend([foto, tag, timestamp, salida])
+    with open('app/Castrosa/tags.csv', 'a') as f_object:
+        writer_object = writer(f_object)
+        writer_object.writerow(lista)
+        f_object.close()
+    return {"msg": "toocool"}

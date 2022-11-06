@@ -8,3 +8,4 @@ services:
     volumes:
         - /root/node/whabotapi/client/public:/app/app/qr
         - /mnt/disk0/images:/app/app/pai
+        - /mnt/disk2/logTags:/app/app/Castrosa
