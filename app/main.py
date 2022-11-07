@@ -15,6 +15,7 @@ import os
 import cv2
 from typing import List
 from csv import writer
+import threading
 
 app = FastAPI()
 
@@ -150,15 +151,10 @@ async def tomar_foto(item: List[foto]):
     """
     msg = "No hay elementos en la lista "
     for aux in item:
-        path = aux.path
-        url = "rtsp://root:mfmssmcl@"+aux.url+"/axis-media/media.amp"
-        cap = cv2.VideoCapture(url)
-        ret, frames = cap.read()
-        if not ret:
-            msg = "Error con la camara " + aux.url
-        else:
-            cv2.imwrite("app/pai/"+path, frames)
-            msg = "toocol"
+        t2 = threading.Thread(
+            name=aux.path, target=takePicture, args=(aux.url, aux.path))
+        t2.start()
+
     return {"msg": msg}
 
 
@@ -193,3 +189,13 @@ async def tag_defectuoso(item: rfid):
         writer_object.writerow(lista)
         f_object.close()
     return {"msg": "toocool"}
+
+
+def takePicture(ip: str, name: str):
+    u = "http://"+ip+"/axis-cgi/jpg/image.cgi"
+    r = requests.get(u, auth=HTTPDigestAuth('root', 'mfmssmcl'), timeout=1)
+    path = name
+    if r.status_code == 200:
+        with open(path, 'wb') as f:
+            for chunk in r:
+                f.write(chunk)
