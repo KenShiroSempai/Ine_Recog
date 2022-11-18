@@ -5,14 +5,13 @@ En resumen, tomamos la imagen que nos mandan y la comparamos con templates
 import numpy as np
 import imutils
 import cv2
-import pytesseract
 import easyocr
 
 RED = (0.0, 0.0, 255.0)
 reader = easyocr.Reader(['es'], gpu=False)
 
 
-def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.2):
+def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.25):
     """Alineacion de imagenes.
 
     Recibimos la imagen y template a comparar, no se tiene un template default
@@ -64,31 +63,8 @@ def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.2):
     return aligned, matchedVis
 
 
-def extractText(aligned, point1, point2):
-    """Extraer texto de cuadros especificos.
-
-    Pasamos como argumento la imagen ya recortada y los puntos
-    donde se quiere extraer texto
-    """
-    height = point2[1] - point1[1]
-    width = point2[0] - point1[0]
-    roi = aligned[
-        point1[1]: point1[1] + height,
-        point1[0]: point1[0] + width
-    ]
-    # rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
-    # cv2.imshow('Roi', rgb)
-    text = pytesseract.image_to_string(
-        roi,
-        lang="spa",
-        config="--psm 11"
-    )
-    cv2.rectangle(aligned, point1, point2, RED)
-    return text, aligned
-
-
-def template(img):
-    """Template.
+def temp(img):
+    """Template1.
 
     Esta funcion no esta optimizada, por eso sigue en mejoras
     y se repite en este archivo
@@ -98,19 +74,19 @@ def template(img):
     ape = ""
     flag = False
 
-    template = cv2.imread('app/templates/-2.jpeg')
+    template = cv2.imread('app/templates/ine1.jpeg')
     pointEle = (488, 403)
-    pointEle2 = (784, 446)
+    pointEle2 = (784, 456)
     pointNam = (300, 160)
-    pointNam2 = (665, 279)
+    pointNam2 = (665, 289)
 
     aligned, matchedVis = imageAlignment(image=img, template=template)
-    elector, image = extractText(
+    elector, image = extractT(
         aligned,
         pointEle,
         pointEle2
     )
-    name, finalImage = extractText(
+    name, finalImage = extractT(
         image,
         pointNam,
         pointNam2
@@ -118,26 +94,25 @@ def template(img):
     cv2.imwrite("app/imgAPI/2.jpg", finalImage)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
-    name = name.split()
     if "NOMBRE" in name:
         name.remove("NOMBRE")
+    if (len(name[0]) < 3):
+        name.pop(0)
     pat = name[0]
     mat = name[1]
-
     name.pop(0)
     name.pop(0)
     for aux in name:
         tmp += aux + " "
-    elector.split()
     for aux in elector:
-        if aux == pat[0] or flag:
+        if aux[0] == pat[0] or flag:
             if aux != " ":
                 ape += aux
             flag = True
     js["paterno"] = pat
     js["materno"] = mat
     js["nombre"] = tmp
-    js["clave"] = ape[0:18]
+    js["clave"] = ape
     return js
 
 
@@ -173,8 +148,8 @@ def template1(img):
     ape = ""
     flag = False
 
-    template = cv2.imread('app/templates/-1.jpeg')
-    pointEle = (500, 438)
+    template = cv2.imread('app/templates/ine.jpeg')
+    pointEle = (500, 433)
     pointEle2 = (784, 476)
     pointNam = (315, 175)
     pointNam2 = (655, 303)
@@ -228,7 +203,7 @@ def ineToJson(path):
     except Exception as ex:
         try:
             print("2")
-            js = template(img)
+            js = temp(img)
             print(ex)
         except Exception as ex:
             js["msg"] = str(ex)
