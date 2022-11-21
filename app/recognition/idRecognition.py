@@ -11,7 +11,59 @@ RED = (0.0, 0.0, 255.0)
 reader = easyocr.Reader(['es'], gpu=False)
 
 
-def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.25):
+def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.3):
+    """Alineacion de imagenes.
+
+    Recibimos la imagen y template a comparar, no se tiene un template default
+    para reutlizar con diferentes ID
+    """
+    image = imutils.resize(image, width=2000)
+    template = imutils.resize(template, width=2000)
+    # Convertimos las imagenes a blanco y negro
+    imgGray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    templateGray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+    # Usamos ORB para detectar puntos clave
+    orb = cv2.ORB_create(maxFeatures)
+    (kpsA, descsA) = orb.detectAndCompute(imgGray, None)
+    (kpsB, descsB) = orb.detectAndCompute(templateGray, None)
+    # Relacionamos las caracteristicas
+    matcher = cv2.DescriptorMatcher_create(
+        cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING
+    )
+    matches = matcher.match(descsA, descsB, None)
+    matches = sorted(matches, key=lambda x: x.distance)
+    # Nos quedamos solo con cierto porcentaje
+    keep = int(len(matches) * keepPercent)
+    matches = matches[:keep]
+    # Visualizamos los puntos
+    matchedVis = cv2.drawMatches(
+        image,
+        kpsA,
+        template,
+        kpsB,
+        matches,
+        None
+    )
+    matchedVis = imutils.resize(matchedVis, width=1000)
+    # Reservamos memoria para los puntos claves
+    ptsA = np.zeros((len(matches), 2), dtype='float')
+    ptsB = np.zeros((len(matches), 2), dtype='float')
+    # Obtenemos los puntos en ambas imagenes
+    for (i, m) in enumerate(matches):
+        ptsA[i] = kpsA[m.queryIdx].pt
+        ptsB[i] = kpsB[m.trainIdx].pt
+    # Obtenemos la homografia
+    (H, mask) = cv2.findHomography(ptsA, ptsB, method=cv2.RANSAC)
+    # Y la usamos para alinear la imagen
+    (h, w) = template.shape[:2]
+    aligned = cv2.warpPerspective(image, H, (w, h))
+    aligned = imutils.resize(aligned, width=1000)
+    # cv2.imwrite('aligned.png', aligned)
+
+    return aligned, matchedVis
+
+
+def imageAlignmentVer(image, template, maxFeatures=1000, keepPercent=0.3):
     """Alineacion de imagenes.
 
     Recibimos la imagen y template a comparar, no se tiene un template default
@@ -81,6 +133,7 @@ def temp(img):
     pointNam2 = (665, 289)
 
     aligned, matchedVis = imageAlignment(image=img, template=template)
+
     elector, image = extractT(
         aligned,
         pointEle,
@@ -91,6 +144,8 @@ def temp(img):
         pointNam,
         pointNam2
     )
+    if (len(name) < 3):
+        return 0
     cv2.imwrite("app/imgAPI/2.jpg", finalImage)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
@@ -149,7 +204,7 @@ def template1(img):
     flag = False
 
     template = cv2.imread('app/templates/ine.jpeg')
-    pointEle = (500, 433)
+    pointEle = (500, 438)
     pointEle2 = (784, 476)
     pointNam = (315, 175)
     pointNam2 = (655, 303)
@@ -165,6 +220,8 @@ def template1(img):
         pointNam,
         pointNam2
     )
+    if (len(name) < 3):
+        return 0
     cv2.imwrite("app/imgAPI/2.jpg", finalImage)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)

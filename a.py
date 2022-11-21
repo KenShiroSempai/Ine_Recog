@@ -61,7 +61,6 @@ def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.3):
     aligned = cv2.warpPerspective(image, H, (w, h))
     aligned = imutils.resize(aligned, width=1000)
     # cv2.imwrite('aligned.png', aligned)
-    
     return aligned, matchedVis
 
 
@@ -215,6 +214,7 @@ def template1(img):
     js["clave"] = ape
     return js
 
+
 def temp(img):
     """Template1.
 
@@ -285,10 +285,12 @@ def ineToJson(path):
             js["msg"] = str(ex)
     return js
 
+
 def main():
     img = cv2.imread("app/imgAPI/0.jpg")
     js = {}
     js = temp(img)
     print(js)
+
 
 main()

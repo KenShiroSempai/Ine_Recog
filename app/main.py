@@ -4,7 +4,7 @@ Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
 from fastapi import FastAPI, File, UploadFile, responses
 import aiofiles
-import app.recognition.idRecognition as id
+from app.recognition.ine import idk
 from pydantic import BaseModel
 import qrcode
 from PIL import Image
@@ -43,7 +43,7 @@ async def subir_identification(file: UploadFile = File(...)):
     async with aiofiles.open("app/imgAPI/0.jpg", 'wb') as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
-        aux = id.ineToJson("app/imgAPI/0.jpg")
+        aux, op = idk("app/imgAPI/0.jpg")
         return aux
 
 
