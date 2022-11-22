@@ -9,7 +9,9 @@ from pydantic import BaseModel
 import qrcode
 from PIL import Image
 import pathlib
+from datetime import datetime
 import os
+import cv2
 
 app = FastAPI()
 
@@ -44,6 +46,10 @@ async def subir_identification(file: UploadFile = File(...)):
         content = await file.read()  # async read
         await out_file.write(content)  # async write
         aux, op = idk("app/imgAPI/0.jpg")
+        if op == 0:
+            cv2.imwrite("app/img/fail/"+str(datetime.now()) +
+                        ".jpg", cv2.imread("app/imgAPI/0.jpg"))
+            return op
         return aux
 
 
