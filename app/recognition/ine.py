@@ -167,17 +167,20 @@ def idk(im):
     img = cv2.imread(im)
     js, op = ine1(img)
     if op != 0:
-        cv2.imwrite("app/img/ine1"+str(datetime.now())+js["clave"]+".jpg", img)
+        cv2.imwrite("app/img/ine1"+str(datetime.now()) +
+                    "_"+js["clave"]+".jpg", img)
         return js, op
     print("no 0")
     js, op = ine0(img)
     if op != 0:
-        cv2.imwrite("app/img/ine0"+str(datetime.now())+js["clave"]+".jpg", img)
+        cv2.imwrite("app/img/ine0"+str(datetime.now()) +
+                    "_"+js["clave"]+".jpg", img)
         return js, op
     print("no 1")
     js, op = ife(img)
     if op != 0:
-        cv2.imwrite("app/img/ife"+str(datetime.now())+js["clave"]+".jpg", img)
+        cv2.imwrite("app/img/ife"+str(datetime.now()) +
+                    "_"+js["clave"]+".jpg", img)
         return js, op
     print("no 2")
     return js, op
