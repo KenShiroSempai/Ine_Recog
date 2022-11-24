@@ -167,10 +167,10 @@ def lic(img):
     ape = ""
     flag = False
     template = cv2.imread(licT)
-    pointEle = (500, 438)
-    pointEle2 = (784, 476)
-    pointNam = (315, 175)
-    pointNam2 = (655, 303)
+    pointEle = (218, 1333)
+    pointEle2 = (509, 1515)
+    pointNam = (150, 808)
+    pointNam2 = (850, 1000)
     aligned, matchedVis = imageAlignment(image=img, template=template)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
@@ -179,7 +179,7 @@ def lic(img):
         pointNam,
         pointNam2
     )
-    if (len(name) < 3):
+    if (len(name) < 2):
         return js, False
     elector, finalImage = extractT(
         image,
@@ -188,16 +188,17 @@ def lic(img):
     )
     cv2.imwrite("app/imgAPI/2.jpg", finalImage)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
-    if "NOMBRE" in name:
-        name.remove("NOMBRE")
     if (len(name[0]) < 3):
         name.pop(0)
-    pat = name[0]
-    mat = name[1]
-    name.pop(0)
-    name.pop(0)
+    print(name)
+    q = len(name)-1
+    pat = name[q-1]
+    mat = name[q]
+    name.pop(q)
+    name.pop(q-1)
     for aux in name:
         tmp += aux + " "
+    print(elector)
     for aux in elector:
         if aux[0] == pat[0] or flag:
             if aux != " ":
