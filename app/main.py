@@ -46,7 +46,7 @@ async def subir_identification(file: UploadFile = File(...)):
         content = await file.read()  # async read
         await out_file.write(content)  # async write
         aux, op = idk("app/imgAPI/0.jpg")
-        if op == 0:
+        if not op:
             cv2.imwrite("app/img/fail/"+str(datetime.now()) +
                         ".jpg", cv2.imread("app/imgAPI/0.jpg"))
             return op

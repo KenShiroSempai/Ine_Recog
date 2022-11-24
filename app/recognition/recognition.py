@@ -7,7 +7,7 @@ RED = (0.0, 0.0, 255.0)
 reader = easyocr.Reader(['es'], gpu=False)
 
 
-def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.3):
+def imageAlignment(image, template, maxFeatures=1000, keepPercent=0.2):
     """Alineacion de imagenes.
 
     Recibimos la imagen y template a comparar, no se tiene un template default
