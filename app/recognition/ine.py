@@ -9,6 +9,10 @@ ifeT = "app/templates/ife.jpeg"
 licT = "app/templates/lic.jpeg"
 
 
+def has_numbers(inputString):
+    return any(char.isdigit() for char in inputString)
+
+
 def ife(img):
     js = {}
     tmp = ""
@@ -163,14 +167,14 @@ def ine1(img):
 
 def lic(img):
     js = {}
-    tmp = ""
     ape = ""
-    flag = False
+    namee = ""
+    au = []
     template = cv2.imread(licT)
-    pointEle = (218, 1333)
-    pointEle2 = (509, 1515)
-    pointNam = (150, 808)
-    pointNam2 = (850, 1000)
+    pointEle = (128, 1364)
+    pointEle2 = (579, 1545)
+    pointNam = (146, 768)
+    pointNam2 = (854, 995)
     aligned, matchedVis = imageAlignment(image=img, template=template)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
@@ -179,8 +183,22 @@ def lic(img):
         pointNam,
         pointNam2
     )
+
     if (len(name) < 2):
         return js, False
+    if (len(name[0]) < 3):
+        name.pop(0)
+    for tmp in name:
+        au += tmp.split()
+    js["materno"] = au[len(au)-1]
+    au.pop(len(au)-1)
+    js["paterno"] = au[len(au)-1]
+    au.pop(len(au)-1)
+    for aaux in au:
+        if not has_numbers(aaux):
+            namee += aaux + " "
+    js["nombre"] = namee
+
     elector, finalImage = extractT(
         image,
         pointEle,
@@ -188,27 +206,13 @@ def lic(img):
     )
     cv2.imwrite("app/imgAPI/2.jpg", finalImage)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
-    if (len(name[0]) < 3):
-        name.pop(0)
-    print(name)
-    q = len(name)-1
-    pat = name[q-1]
-    mat = name[q]
-    name.pop(q)
-    name.pop(q-1)
-    for aux in name:
-        tmp += aux + " "
+    if "RFC" in elector:
+        elector.remove("RFC")
     print(elector)
-    for aux in elector:
-        if aux[0] == pat[0] or flag:
-            if aux != " ":
-                ape += aux
-            flag = True
-    js["paterno"] = pat
-    js["materno"] = mat
-    js["nombre"] = tmp
+    if len(elector) == 1:
+        ape = elector[0]
     js["clave"] = ape
-    js["name"] = ape + "_" + pat + "_" + mat
+    js["name"] = ape + "_" + js["paterno"] + "_" + js["materno"]
     return js, True
 
 
