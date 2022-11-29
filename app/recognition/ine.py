@@ -171,10 +171,10 @@ def lic(img):
     namee = ""
     au = []
     template = cv2.imread(licT)
-    pointEle = (128, 1364)
-    pointEle2 = (579, 1545)
+    pointEle = (128, 1354)
+    pointEle2 = (589, 1545)
     pointNam = (146, 768)
-    pointNam2 = (854, 995)
+    pointNam2 = (854, 975)
     aligned, matchedVis = imageAlignment(image=img, template=template)
     cv2.imwrite("app/imgAPI/1.jpg", aligned)
     cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
