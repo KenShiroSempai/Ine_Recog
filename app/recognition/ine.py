@@ -189,7 +189,8 @@ def lic(img):
     if (len(name[0]) < 3):
         name.pop(0)
     for tmp in name:
-        au += tmp.split()
+        if not (tmp[0:3]=="Lic"):
+            au += tmp.split()
     js["materno"] = au[len(au)-1]
     au.pop(len(au)-1)
     js["paterno"] = au[len(au)-1]
