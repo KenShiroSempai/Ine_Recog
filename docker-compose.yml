@@ -8,3 +8,4 @@ services:
     volumes:
         - /root/node/whabotapi/client/public:/app/app/qr
         - /mnt/disk2/fotosID:/app/app/img
+    restart: always
