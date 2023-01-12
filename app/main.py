@@ -2,7 +2,7 @@
 
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
-from fastapi import FastAPI, File, UploadFile, responses
+from fastapi import FastAPI, File, UploadFile, responses, Form
 import aiofiles
 from app.recognition.ine import idk
 from pydantic import BaseModel
@@ -100,3 +100,14 @@ async def borrar_whatsQr():
         file_to_rem.unlink()
         return {"msg": "Archivo eliminado"}
     return {"msg": "No hay archivo para eliminar"}
+
+@app.post("/refrendo")
+async def create_upload_files(files: list[UploadFile] = File(...),tag: str = Form(...),):
+    newPath = "app/tag/"+tag+"/"
+    os.mkdir(newPath)
+    for file in files:
+        destination_file_path = newPath +file.filename #output file path
+        async with aiofiles.open(destination_file_path, 'wb') as out_file:
+            while content := await file.read(1024):  # async read file chunk
+                await out_file.write(content)  # async write file chunk
+    return {"Result": "OK", "filenames": [file.filename for file in files]}

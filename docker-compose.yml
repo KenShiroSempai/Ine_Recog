@@ -8,4 +8,5 @@ services:
     volumes:
         - /root/node/whabotapi/client/public:/app/app/qr
         - /mnt/disk2/fotosID:/app/app/img
+        - /mnt/disk2/refrendo2023:/app/app/tag
     restart: always
