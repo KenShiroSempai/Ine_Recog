@@ -102,8 +102,8 @@ async def borrar_whatsQr():
     return {"msg": "No hay archivo para eliminar"}
 
 @app.post("/refrendo")
-async def create_upload_files(files: list[UploadFile] = File(...),tag: str = Form(...),):
-    newPath = "app/tag/"+tag+"/"
+async def create_upload_files(files: list[UploadFile] = File(...)):
+    newPath = "app/tag/"+"1234"+"/"
     os.mkdir(newPath)
     for file in files:
         destination_file_path = newPath +file.filename #output file path
