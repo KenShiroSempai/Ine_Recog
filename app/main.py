@@ -123,7 +123,23 @@ async def create_upload_files(files: list[UploadFile] = File(...), tag: str = Fo
         async with aiofiles.open(destination_file_path, 'wb') as out_file:
             while content := await file.read(1024):  # async read file chunk
                 await out_file.write(content)  # async write file chunk
-    postLomas(tag=tag,qr=qr)
+    aux = r'file://192.168.1.202/Files/tagsRefrendo/'
+    # aux = file://192.168.1.202/Files/tagsRefrendo/
+    js = {
+        "tag": tag,
+        "url" : aux + tag + "/",
+        "estado":"pe"
+    }
+    js2 = {
+        "tag": tag,
+        "qr" : qr
+    }
+    url = "http://192.168.1.202:3001/tag/odoo"
+    url2 = "http://192.168.1.202:3001/tag/odoo/qr"
+    response = requests.post(url, json=js)
+    print(response.text)
+    response =requests.post(url2, json=js2)
+    print(response.text)
     return {"Result": "OK", "filenames": [file.filename for file in files]}
 
 
