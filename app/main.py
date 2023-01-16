@@ -13,6 +13,8 @@ import pathlib
 from datetime import datetime
 import os
 import cv2
+from base64 import b64decode
+import time
 
 app = FastAPI()
 
@@ -33,9 +35,19 @@ class Refren(BaseModel):
     Se hizo una clase en para que en un futuro, si se quieren aumentar los
     parametros sea mas sencillo.
     """
+    img: str
+    name: str
     tag: str
+
+
+class Re(BaseModel):
+    """Objeto a recivir en el apartado de QR.
+
+    Se hizo una clase en para que en un futuro, si se quieren aumentar los
+    parametros sea mas sencillo.
+    """
     qr: str
-    tarjeta: str
+    tag: str
 
 
 @app.get("/")
@@ -115,59 +127,37 @@ async def borrar_whatsQr():
 
 
 @app.post("/refrendo")
-async def create_upload_files(files: list[UploadFile] = File(...), tag: str = Form(...),qr: str = Form(...)):
-    newPath = "app/tag/"+tag+"/"
-    os.mkdir(newPath)
-    for file in files:
-        destination_file_path = newPath + file.filename  # output file path
-        async with aiofiles.open(destination_file_path, 'wb') as out_file:
-            while content := await file.read(1024):  # async read file chunk
-                await out_file.write(content)  # async write file chunk
+async def postRefrendo(item: Re):
+    postLomas(tag=item.tag, qr=item.qr)
+
+
+@app.post('/base64')
+def file_upload(item: Refren):
+    newPath = "app/tag/"+item.tag+"/"
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    name = item.name
+    if (os.path.isfile(newPath + name)):
+        name = item.name + time.strftime("%Y%m%d-%H%M%S")
+    with open(newPath + name, "wb") as f:
+        f.write(b64decode(item.img))
+
+
+def postLomas(tag: str, qr: str):
     aux = r'file://192.168.1.202/Files/tagsRefrendo/'
     # aux = file://192.168.1.202/Files/tagsRefrendo/
     js = {
         "tag": tag,
-        "url" : aux + tag + "/",
-        "estado":"pe"
+        "url": aux + tag + "/",
+        "estado": "pe"
     }
     js2 = {
         "tag": tag,
-        "qr" : qr
+        "qr": qr
     }
     url = "http://192.168.1.202:3001/tag/odoo"
     url2 = "http://192.168.1.202:3001/tag/odoo/qr"
     response = requests.post(url, json=js)
     print(response.text)
-    response =requests.post(url2, json=js2)
+    response = requests.post(url2, json=js2)
     print(response.text)
-    return {"Result": "OK", "filenames": [file.filename for file in files]}
-
-
-@app.post('/file')
-def _file_upload(
-        my_file: UploadFile = File(...)
-):
-    return {
-        "name": my_file.filename
-    }
-
-def postLomas(tag:str,qr:str):
-    aux = r'file://192.168.1.202/Files/tagsRefrendo/'
-    # aux = file://192.168.1.202/Files/tagsRefrendo/
-    js = {
-        "tag": tag,
-        "url" : aux + tag + "/",
-        "estado":"pe"
-    }
-    js2 = {
-        "tag": tag,
-        "qr" : qr
-    }
-    url = "http://192.168.1.202:3001/tag/odoo"
-    url2 = "http://192.168.1.202:3001/tag/odoo/qr"
-    response = requests.post(url, json=js)
-    print(response.text)
-    response =requests.post(url2, json=js2)
-    print(response.text)
-
-     
