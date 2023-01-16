@@ -48,7 +48,7 @@ class Re(BaseModel):
     """
     qr: str
     tag: str
-    status:str
+    status: str
 
 
 @app.get("/")
@@ -129,7 +129,9 @@ async def borrar_whatsQr():
 
 @app.post("/refrendo")
 async def postRefrendo(item: Re):
-    postLomas(tag=item.tag, qr=item.qr,status=item.status)
+    print(item.tag + "  " + item.status+"  "+item.qr)
+    postLomas(tag=item.tag, qr=item.qr, status=item.status)
+
 
 @app.post("/reporte")
 async def postRefrendo(item: Re):
@@ -148,7 +150,7 @@ def file_upload(item: Refren):
         f.write(b64decode(item.img))
 
 
-def postLomas(tag: str, qr: str,status:str):
+def postLomas(tag: str, qr: str, status: str):
     aux = r'file://192.168.1.202/Files/tagsRefrendo/'
     # aux = file://192.168.1.202/Files/tagsRefrendo/
     js = {
