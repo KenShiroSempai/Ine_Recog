@@ -141,7 +141,7 @@ def postLomas(tag:str,qr:str):
     js = {
         "tag": tag,
         "url" : aux + tag + "/",
-        "status":"pe"
+        "estado":"pe"
     }
     js2 = {
         "tag": tag,
@@ -149,5 +149,9 @@ def postLomas(tag:str,qr:str):
     }
     url = "http://192.168.1.202:3001/tag/odoo"
     url2 = "http://192.168.1.202:3001/tag/odoo/qr"
-    requests.post(url, json=js)
-    requests.post(url2, json=js2)
+    response = requests.post(url, json=js)
+    print(response.text)
+    response =requests.post(url2, json=js2)
+    print(response.text)
+
+     
