@@ -145,7 +145,7 @@ def file_upload(item: Refren):
         os.mkdir(newPath)
     name = item.name
     if (os.path.isfile(newPath + name)):
-        name = item.name + time.strftime("%Y%m%d-%H%M%S")+".png"
+        name = "refrendo2023__" + time.strftime("%Y%m%d-%H%M%S")+".png"
     with open(newPath + name, "wb") as f:
         f.write(b64decode(item.img))
 
