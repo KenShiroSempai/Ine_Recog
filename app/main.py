@@ -151,7 +151,7 @@ def file_upload(item: Refren):
 
 
 def postLomas(tag: str, qr: str, status: str):
-    aux = r'file://192.168.1.202/Files/tagsRefrendo/'
+    aux = r'file://192.168.2.202/Files/tagsRefrendo/'
     # aux = file://192.168.1.202/Files/tagsRefrendo/
     js = {
         "tag": tag,
