@@ -15,6 +15,9 @@ import os
 import cv2
 from base64 import b64decode
 import time
+from os.path import isfile, join
+from pathlib import Path
+from os import listdir, unlink
 
 app = FastAPI()
 
@@ -49,6 +52,47 @@ class Re(BaseModel):
     qr: str
     tag: str
     status: str
+
+
+@app.get("/refrendo2/{photo}")
+async def retorna_TagPhoto(photo):
+    """Monitorear el procesamiento.
+
+    Metodo exclusivo para regresar las imagenes
+    de tal modo de ver los reultados
+    """
+    try:
+        path = str(photo)
+    except Exception as ex:
+        return {"error": ex.args}
+    try:
+        return responses.FileResponse(f"app/tag/{path}")
+    except Exception as ex:
+        return {"error": ex.args}
+
+
+@app.get("/refrendo/{photo}")
+async def retorna_Tag(photo):
+    """Monitorear el procesamiento.
+
+    Metodo exclusivo para regresar las imagenes
+    de tal modo de ver los reultados
+    """
+    try:
+        num = int(photo)
+    except Exception as ex:
+        return {"error": ex.args}
+    newPath = "app/tag/"+num
+    if not (os.path.exists(newPath)):
+        return {"ERROR": "No hay fotos de ese tag"}
+    onlyfiles = [f for f in listdir(newPath) if isfile(join(newPath, f))]
+    onlyfiles.sort()
+    js = {}
+
+    num = len(onlyfiles)
+    for i in range(1, num+1):
+        js[str(i)] = num+str(onlyfiles[num-i])
+    return js
 
 
 @app.get("/")
