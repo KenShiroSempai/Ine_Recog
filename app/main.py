@@ -92,7 +92,7 @@ async def retorna_Tag(photo):
 
     num = len(onlyfiles)
     for i in range(1, num+1):
-        js[str(i)] = str(tag)+"/"+str(onlyfiles[num-i])
+        js[str(i)] ="http://localhost:4999/refrendo2/" + str(tag)+"/"+str(onlyfiles[num-i])
     return js
 
 
