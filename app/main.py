@@ -54,15 +54,15 @@ class Re(BaseModel):
     status: str
 
 
-@app.get("/refrendo2/{photo}")
-async def retorna_TagPhoto(photo):
+@app.get("/refrendo2/{tag}/{photo}")
+async def retorna_TagPhoto(tag, photo):
     """Monitorear el procesamiento.
 
     Metodo exclusivo para regresar las imagenes
     de tal modo de ver los reultados
     """
     try:
-        path = str(photo)
+        path = str(tag) + "/" + str(photo)
     except Exception as ex:
         return {"error": ex.args}
     try:
