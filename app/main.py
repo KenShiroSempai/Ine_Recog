@@ -71,7 +71,7 @@ async def retorna_TagPhoto(photo):
         return {"error": ex.args}
 
 
-@app.get("/refrendo/{photo}")
+@app.get("/refrendoo/{photo}")
 async def retorna_Tag(photo):
     """Monitorear el procesamiento.
 
@@ -82,7 +82,7 @@ async def retorna_Tag(photo):
         num = int(photo)
     except Exception as ex:
         return {"error": ex.args}
-    newPath = "app/tag/"+num
+    newPath = "app/tag/"+str(num)
     if not (os.path.exists(newPath)):
         return {"ERROR": "No hay fotos de ese tag"}
     onlyfiles = [f for f in listdir(newPath) if isfile(join(newPath, f))]
