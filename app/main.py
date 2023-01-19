@@ -66,6 +66,7 @@ async def retorna_TagPhoto(photo):
     except Exception as ex:
         return {"error": ex.args}
     try:
+        print("app/tag/{path}")
         return responses.FileResponse(f"app/tag/{path}")
     except Exception as ex:
         return {"error": ex.args}
