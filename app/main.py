@@ -79,10 +79,10 @@ async def retorna_Tag(photo):
     de tal modo de ver los reultados
     """
     try:
-        num = int(photo)
+        tag = int(photo)
     except Exception as ex:
         return {"error": ex.args}
-    newPath = "app/tag/"+str(num)
+    newPath = "app/tag/"+str(tag)
     if not (os.path.exists(newPath)):
         return {"ERROR": "No hay fotos de ese tag"}
     onlyfiles = [f for f in listdir(newPath) if isfile(join(newPath, f))]
@@ -91,7 +91,7 @@ async def retorna_Tag(photo):
 
     num = len(onlyfiles)
     for i in range(1, num+1):
-        js[str(i)] = str(num)+str(onlyfiles[num-i])
+        js[str(i)] = str(tag)+str(onlyfiles[num-i])
     return js
 
 
