@@ -127,6 +127,7 @@ async def logEnramada(item: logEnramada):
     print(aux)
     if not op:
         aux["clave"] = timestamp
+        aux["name"] = "EMPTY"
         name = timestamp + ".jpg"
         cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
                     cv2.imread("app/imgAPI/0.jpg"))
