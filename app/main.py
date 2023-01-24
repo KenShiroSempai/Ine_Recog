@@ -145,6 +145,7 @@ async def logEnramada(item: logEnramada):
         writer_object = writer(f_object)
         writer_object.writerow(lista)
         f_object.close()
+    return {"msg":"ok"}
 
 @app.get("/")
 async def root():
