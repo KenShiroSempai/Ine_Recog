@@ -21,6 +21,17 @@ from os import listdir, unlink
 
 app = FastAPI()
 
+class logEnramada(BaseModel):
+    """Objeto a recivir en el apartado de QR.
+
+    Se hizo una clase en para que en un futuro, si se quieren aumentar los
+    parametros sea mas sencillo.
+    """
+    building: str
+    floor: str
+    conjunto: str
+    idCArd: str
+    face: str
 
 class Item(BaseModel):
     """Objeto a recivir en el apartado de QR.
@@ -95,6 +106,44 @@ async def retorna_Tag(photo):
         js[str(i)] ="http://localhost:4999/refrendo2/" + str(tag)+"/"+str(onlyfiles[num-i])
     return js
 
+@app.post("/enramadalog")
+async def logEnramada(item: logEnramada):
+
+    lista = []
+
+    pathDefault = "app/imgAPI/0.jpg"
+    building = item.building
+    floor = item.floor
+    idCArd = item.idCArd
+    face = item.face
+    conjunto = item.conjunto
+
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+
+    with open(pathDefault, "wb") as f:
+        f.write(b64decode(idCArd))
+    aux, op = idk(pathDefault)
+    print(aux)
+    if not op:
+        name = timestamp + ".jpg"
+        cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
+                    cv2.imread("app/imgAPI/0.jpg"))
+    else:
+        name = aux["name"]
+    lista.extend([conjunto, building, floor, str(timestamp), name])
+
+    newPath = "app/" + conjunto+"/"+aux["clave"]+"/"
+    tmp = conjunto+"_" + building+"_"+floor+"_" + name
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    with open(newPath + "idCard" + "_" +tmp + ".png", "wb") as f:
+        f.write(b64decode(idCArd))
+    with open(newPath + "face" + "_" + tmp + ".png", "wb") as f:
+        f.write(b64decode(face))
+    with open("app/Enramada/" + 'log.csv', 'a') as f_object:
+        writer_object = writer(f_object)
+        writer_object.writerow(lista)
+        f_object.close()
 
 @app.get("/")
 async def root():

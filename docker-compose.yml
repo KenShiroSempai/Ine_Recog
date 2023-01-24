@@ -9,4 +9,5 @@ services:
         - /root/node/whabotapi/client/public:/app/app/qr
         - /mnt/disk2/fotosID:/app/app/img
         - /mnt/disk2/samba/files/tagsRefrendo:/app/app/tag
+        - /mnt/disk2/bitacoraIO:/app/app/Enramada
     restart: always
