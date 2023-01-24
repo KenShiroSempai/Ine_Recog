@@ -133,17 +133,20 @@ async def logEnramada(item: logEnramada):
                     cv2.imread("app/imgAPI/0.jpg"))
     else:
         name = aux["name"]
-
-    lista.extend([conjunto, building, floor, str(timestamp), aux["name"]])
-
     newPath = "app/" + conjunto+"/"+aux["clave"]+"/"
     tmp = conjunto+"_" + building+"_"+floor+"_" + name
+
+    
+
+    idPath =  "idCard" + "_" +tmp + ".png"
+    facePath =  "face" + "_" + tmp + ".png"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    with open(newPath + "idCard" + "_" +tmp + ".png", "wb") as f:
+    with open(newPath +idPath, "wb") as f:
         f.write(b64decode(idCArd))
-    with open(newPath + "face" + "_" + tmp + ".png", "wb") as f:
+    with open(newPath +facePath, "wb") as f:
         f.write(b64decode(face))
+    lista.extend([conjunto, building, floor, str(timestamp), aux["name"],idPath,facePath],"SIN ASIGNAR","SIN CAMARA AXIS","FALTA DE ANTENA/HANDHELD","FALSE")
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
