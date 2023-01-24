@@ -146,7 +146,7 @@ async def logEnramada(item: logEnramada):
         f.write(b64decode(idCArd))
     with open(newPath +facePath, "wb") as f:
         f.write(b64decode(face))
-    lista.extend([conjunto, building, floor, str(timestamp), aux["name"],idPath,facePath],"SIN ASIGNAR","SIN CAMARA AXIS","FALTA DE ANTENA/HANDHELD","FALSE")
+    lista.extend([conjunto, building, floor, str(timestamp), aux["name"],idPath,facePath,"SIN ASIGNAR","SIN CAMARA AXIS","FALTA DE ANTENA/HANDHELD","FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
