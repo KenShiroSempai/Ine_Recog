@@ -18,6 +18,7 @@ import time
 from os.path import isfile, join
 from pathlib import Path
 from os import listdir, unlink
+from csv import writer
 
 app = FastAPI()
 
