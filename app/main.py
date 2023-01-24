@@ -126,12 +126,14 @@ async def logEnramada(item: logEnramada):
     aux, op = idk(pathDefault)
     print(aux)
     if not op:
+        aux["name"] = timestamp
         name = timestamp + ".jpg"
         cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
                     cv2.imread("app/imgAPI/0.jpg"))
     else:
         name = aux["name"]
-    lista.extend([conjunto, building, floor, str(timestamp), name])
+
+    lista.extend([conjunto, building, floor, str(timestamp), aux["name"]])
 
     newPath = "app/" + conjunto+"/"+aux["clave"]+"/"
     tmp = conjunto+"_" + building+"_"+floor+"_" + name
