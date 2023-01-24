@@ -11,3 +11,5 @@ services:
         - /mnt/disk2/samba/files/tagsRefrendo:/app/app/tag
         - /mnt/disk2/bitacoraIO:/app/app/Enramada
     restart: always
+    environment:
+      - TZ=America/Mexico_City
