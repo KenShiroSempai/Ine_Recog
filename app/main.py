@@ -36,6 +36,7 @@ class logEnramada(BaseModel):
     face: str
     autorizo: str
     car:str
+    origen:str
 
 
 class Item(BaseModel):
@@ -157,7 +158,7 @@ async def logEnramada(item: logEnramada):
         f.write(b64decode(face))
     with open(newPath + carPath, "wb") as f:
         f.write(b64decode(car))
-    lista.extend([conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
+    lista.extend([item.origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
                  facePath, "SIN ASIGNAR", "SIN CAMARA AXIS", "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
