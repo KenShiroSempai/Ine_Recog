@@ -140,6 +140,7 @@ async def logEnramada(item: logEnramada):
     else:
         name = aux["name"]
     newPath = "app/" + conjunto+"/"+building+"/"+aux["clave"]
+    
     tmp = conjunto+"_" + building+"_"+floor+"_" + name
 
     idPath = "idCard" + "_" + tmp + ".png"
