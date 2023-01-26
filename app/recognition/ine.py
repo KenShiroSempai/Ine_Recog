@@ -213,7 +213,7 @@ def lic(img):
     if len(elector) == 1:
         ape = elector[0]
     js["clave"] = ape
-    js["name"] = ape + "_" + js["paterno"] + "_" + js["materno"]
+    js["name"] = js["paterno"] + "_" + js["materno"]+ "_" + js["nombre"]
     return js, True
 
 
