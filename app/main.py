@@ -143,14 +143,20 @@ async def logEnramada(item: logEnramada):
         name = aux["name"]
     newPath = "app/" + conjunto+"/"+building+"/"+floor
 
-    idPath = "/" + str(timestamp)+"idCard" + "_" + name + ".png"
-    facePath = "/" + str(timestamp)+"face" + "_" + name + ".png"
+    idPath = "/" + "idCard" + "_" + name + ".png"
+    facePath = "/" + "face" + "_" + name + ".png"
+    carPath = "/" + "car" + "_" + name + ".png"
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    newPath = newPath+"/"+timestamp
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     with open(newPath + idPath, "wb") as f:
         f.write(b64decode(idCArd))
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
+    with open(newPath + carPath, "wb") as f:
+        f.write(b64decode(car))
     lista.extend([conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
                  facePath, "SIN ASIGNAR", "SIN CAMARA AXIS", "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
