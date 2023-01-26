@@ -35,6 +35,7 @@ class logEnramada(BaseModel):
     idCArd: str
     face: str
     autorizo: str
+    car:str
 
 
 class Item(BaseModel):
@@ -124,6 +125,7 @@ async def logEnramada(item: logEnramada):
     face = item.face
     conjunto = item.conjunto
     autorizo = item.autorizo
+    car = item.car
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
 
