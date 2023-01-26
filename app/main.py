@@ -22,6 +22,7 @@ from csv import writer
 
 app = FastAPI()
 
+
 class logEnramada(BaseModel):
     """Objeto a recivir en el apartado de QR.
 
@@ -33,6 +34,8 @@ class logEnramada(BaseModel):
     conjunto: str
     idCArd: str
     face: str
+    autorizo: str
+
 
 class Item(BaseModel):
     """Objeto a recivir en el apartado de QR.
@@ -104,8 +107,10 @@ async def retorna_Tag(photo):
 
     num = len(onlyfiles)
     for i in range(1, num+1):
-        js[str(i)] ="http://localhost:4999/refrendo2/" + str(tag)+"/"+str(onlyfiles[num-i])
+        js[str(i)] = "http://localhost:4999/refrendo2/" + \
+            str(tag)+"/"+str(onlyfiles[num-i])
     return js
+
 
 @app.post("/enramadalog")
 async def logEnramada(item: logEnramada):
@@ -118,6 +123,7 @@ async def logEnramada(item: logEnramada):
     idCArd = item.idCArd
     face = item.face
     conjunto = item.conjunto
+    autorizo = item.autorizo
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
 
@@ -133,25 +139,25 @@ async def logEnramada(item: logEnramada):
                     cv2.imread("app/imgAPI/0.jpg"))
     else:
         name = aux["name"]
-    newPath = "app/" + conjunto+"/"+aux["clave"]+"/"
+    newPath = "app/" + conjunto+"/"+building+""/+aux["clave"]
     tmp = conjunto+"_" + building+"_"+floor+"_" + name
 
-    
-
-    idPath =  "idCard" + "_" +tmp + ".png"
-    facePath =  "face" + "_" + tmp + ".png"
+    idPath = "idCard" + "_" + tmp + ".png"
+    facePath = "face" + "_" + tmp + ".png"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    with open(newPath +idPath, "wb") as f:
+    with open(newPath + idPath, "wb") as f:
         f.write(b64decode(idCArd))
-    with open(newPath +facePath, "wb") as f:
+    with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
-    lista.extend([conjunto, building, floor, str(timestamp), aux["name"],idPath,facePath,"SIN ASIGNAR","SIN CAMARA AXIS","FALTA DE ANTENA/HANDHELD","FALSE"])
+    lista.extend([conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
+                 facePath, "SIN ASIGNAR", "SIN CAMARA AXIS", "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
         f_object.close()
-    return {"msg":"ok"}
+    return {"msg": "ok"}
+
 
 @app.get("/")
 async def root():
