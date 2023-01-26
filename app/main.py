@@ -141,8 +141,8 @@ async def logEnramada(item: logEnramada):
         name = aux["name"]
     newPath = "app/" + conjunto+"/"+building
 
-    idPath = str(timestamp)+"idCard" + "_" + name + ".png"
-    facePath = str(timestamp)+"face" + "_" + name + ".png"
+    idPath = "/" + str(timestamp)+"idCard" + "_" + name + ".png"
+    facePath = "/" + str(timestamp)+"face" + "_" + name + ".png"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     with open(newPath + idPath, "wb") as f:
