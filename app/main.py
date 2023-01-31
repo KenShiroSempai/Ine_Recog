@@ -19,6 +19,9 @@ from os.path import isfile, join
 from pathlib import Path
 from os import listdir, unlink
 from csv import writer
+import json
+
+token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
 app = FastAPI()
 
@@ -158,8 +161,39 @@ async def logEnramada(item: logEnramada):
         f.write(b64decode(face))
     with open(newPath + carPath, "wb") as f:
         f.write(b64decode(car))
+    plate = "Error"
+    make = "Error"
+    m = "Error"
+    color = "Error"
+    with open(newPath + carPath, 'rb') as fp:
+        if not (fp):
+            plate = "Error de archivo"
+            make = "Error de archivo"
+            m = "Error de archivo"
+            color = "Error de archivo"
+        else:
+            try:
+                response = requests.post(
+                    'https://api.platerecognizer.com/v1/plate-reader/',
+                    data=dict(regions=['mx', 'us-ca'], mmc=True),
+                    files=dict(upload=fp),
+                    headers={'Authorization': 'Token '+token})
+                tmp = json.dumps(response.json())
+                f = open("apiResponse.json", "w")
+                f.write(tmp)
+                f.close()
+                if (json.loads(tmp)["results"]):
+                    plate = (json.loads(tmp)["results"][0]["plate"])
+                    make = (json.loads(tmp)["results"][0]["model_make"][0]["make"])
+                    m = (json.loads(tmp)["results"][0]["model_make"][0]["model"])
+                    color = (json.loads(tmp)["results"][0]["color"][0]["color"])
+                    return plate.upper(), make, m, color
+                print("no detecto placa, eligiendo otra foto")
+            except requests.exceptions.ConnectionError:
+                print("Fallo de coneccion")
+
     lista.extend([item.origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, "SIN ASIGNAR", "SIN CAMARA AXIS", "FALTA DE ANTENA/HANDHELD", "FALSE"])
+                 facePath, plate,make,m,color,"SIN ASIGNAR", "SIN CAMARA AXIS", "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
