@@ -172,6 +172,7 @@ async def logEnramada(item: logEnramada):
             m = "Error de archivo"
             color = "Error de archivo"
         else:
+            print("paso el plate")
             try:
                 response = requests.post(
                     'https://api.platerecognizer.com/v1/plate-reader/',
@@ -179,6 +180,7 @@ async def logEnramada(item: logEnramada):
                     files=dict(upload=fp),
                     headers={'Authorization': 'Token '+token})
                 tmp = json.dumps(response.json())
+                print(tmp)
                 f = open("apiResponse.json", "w")
                 f.write(tmp)
                 f.close()
