@@ -167,15 +167,14 @@ async def logEnramada(item: logEnramada):
     newPath = newPath+"/"+timestamp 
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-  
+    carPath = newPath + carPath
+    with open(carPath, "wb") as f:
+        f.write(b64decode(car))
     with open(newPath + idPath, "wb") as f:
         f.write(b64decode(idCArd))
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
-    carPath = newPath + carPath
-    with open(carPath, "wb") as f:
-        f.write(b64decode(car))
-    time.sleep(1)
+
     print(carPath)
     with open(carPath, 'rb') as fp:
         if not (fp):
@@ -328,3 +327,6 @@ def postLomas(tag: str, qr: str, status: str):
     url2 = "http://192.168.1.202:3001/tag/odoo/qr"
     response = requests.post(url, json=js)
     response = requests.post(url2, json=js2)
+
+def logEn():
+    print("oda")
