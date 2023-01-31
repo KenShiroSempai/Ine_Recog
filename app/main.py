@@ -154,7 +154,10 @@ async def logEnramada(item: logEnramada):
     newPath = newPath +"/"+floor
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-
+    plate = "Error"
+    make = "Error"
+    m = "Error"
+    color = "Error"
     idPath = "/" + "idCard" + "_" + name + ".png"
     facePath = "/" + "face" + "_" + name + ".png"
     carPath = "/" + "car" + "_" + name + ".png"
@@ -169,15 +172,11 @@ async def logEnramada(item: logEnramada):
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
     carPath = newPath + carPath
-    with open(carPath, "wb") as f:
-        f.write(b64decode(car))
-        f.close()
-    plate = "Error"
-    make = "Error"
-    m = "Error"
-    color = "Error"
-    print(carPath)
-    with open(carPath, 'rb') as fp:
+    with open(carPath, "wb") as fp:
+        fp.write(b64decode(car))
+
+        print(carPath)
+    # with open(carPath, 'rb') as fp:
         if not (fp):
             plate = "Error de archivo"
             make = "Error de archivo"
@@ -205,7 +204,7 @@ async def logEnramada(item: logEnramada):
                 print("Fallo de coneccion")
 
     lista.extend([item.origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, plate,make,m,color,"SIN ASIGNAR", "SIN CAMARA AXIS", "FALTA DE ANTENA/HANDHELD", "FALSE"])
+                 facePath, plate,make,m,color,"SIN ASIGNAR", "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
