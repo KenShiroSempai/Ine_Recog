@@ -170,6 +170,7 @@ async def logEnramada(item: logEnramada):
     carPath = newPath + carPath
     with open(carPath, "wb") as f:
         f.write(b64decode(car))
+        f.close()
     with open(newPath + idPath, "wb") as f:
         f.write(b64decode(idCArd))
     with open(newPath + facePath, "wb") as f:
