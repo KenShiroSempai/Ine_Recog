@@ -41,7 +41,7 @@ class logEnramada(BaseModel):
     autorizo: str
     car:str
     origen:str
-    guardia:str
+    guard:str
 
 
 class Item(BaseModel):
