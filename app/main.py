@@ -175,8 +175,8 @@ async def logEnramada(item: logEnramada):
     with open(carPath, "wb") as fp:
         fp.write(b64decode(car))
 
-        print(carPath)
-    # with open(carPath, 'rb') as fp:
+    print(carPath)
+    with open(carPath, 'rb') as fp:
         if not (fp):
             plate = "Error de archivo"
             make = "Error de archivo"
