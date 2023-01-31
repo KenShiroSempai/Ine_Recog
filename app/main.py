@@ -41,6 +41,7 @@ class logEnramada(BaseModel):
     autorizo: str
     car:str
     origen:str
+    guardia:str
 
 
 class Item(BaseModel):
@@ -131,6 +132,7 @@ async def logEnramada(item: logEnramada):
     conjunto = item.conjunto
     autorizo = item.autorizo
     car = item.car
+    guardia = item.guardia
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
 
@@ -205,7 +207,7 @@ async def logEnramada(item: logEnramada):
                 print("Fallo de coneccion")
 
     lista.extend([item.origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, plate,make,m,color,"SIN ASIGNAR", "FALTA DE ANTENA/HANDHELD", "FALSE"])
+                 facePath, plate,make,m,color,guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
