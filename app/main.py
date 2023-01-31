@@ -187,8 +187,6 @@ async def logEnramada(item: logEnramada):
                     make = (json.loads(tmp)["results"][0]["model_make"][0]["make"])
                     m = (json.loads(tmp)["results"][0]["model_make"][0]["model"])
                     color = (json.loads(tmp)["results"][0]["color"][0]["color"])
-                    return plate.upper(), make, m, color
-                print("no detecto placa, eligiendo otra foto")
             except requests.exceptions.ConnectionError:
                 print("Fallo de coneccion")
 
