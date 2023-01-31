@@ -145,7 +145,13 @@ async def logEnramada(item: logEnramada):
                     cv2.imread("app/imgAPI/0.jpg"))
     else:
         name = aux["name"]
-    newPath = "app/" + conjunto+"/"+building+"/"+floor
+    
+    newPath = "app/" + conjunto+"/"+building
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    newPath = newPath +"/"+floor
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
 
     idPath = "/" + "idCard" + "_" + name + ".png"
     facePath = "/" + "face" + "_" + name + ".png"
