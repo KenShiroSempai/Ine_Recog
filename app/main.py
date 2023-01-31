@@ -158,20 +158,23 @@ async def logEnramada(item: logEnramada):
     carPath = "/" + "car" + "_" + name + ".png"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath+"/"+timestamp
+    newPath = newPath+"/"+timestamp 
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
+  
     with open(newPath + idPath, "wb") as f:
         f.write(b64decode(idCArd))
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
-    with open(newPath + carPath, "wb") as f:
+    carPath = newPath + carPath
+    with open(carPath, "wb") as f:
         f.write(b64decode(car))
     plate = "Error"
     make = "Error"
     m = "Error"
     color = "Error"
-    with open(newPath + carPath, 'rb') as fp:
+    print(carPath)
+    with open(carPath, 'rb') as fp:
         if not (fp):
             plate = "Error de archivo"
             make = "Error de archivo"
