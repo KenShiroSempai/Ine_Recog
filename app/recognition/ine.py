@@ -146,6 +146,9 @@ def ine1(img):
         name.remove("NOMBRE")
     if "NONBRE" in name:
         name.remove("NOMBRE")
+    if "NCMPRE" in name:
+        name.remove("NCMPRE")
+    
     if (len(name[0]) < 3):
         name.pop(0)
     pat = name[0]
