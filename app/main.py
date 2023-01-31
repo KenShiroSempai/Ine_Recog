@@ -171,6 +171,7 @@ async def logEnramada(item: logEnramada):
     carPath = newPath + carPath
     with open(carPath, "wb") as f:
         f.write(b64decode(car))
+        f.close()
     plate = "Error"
     make = "Error"
     m = "Error"
