@@ -20,6 +20,7 @@ from pathlib import Path
 from os import listdir, unlink
 from csv import writer
 import json
+import time
 
 token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
@@ -172,9 +173,9 @@ async def logEnramada(item: logEnramada):
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
     carPath = newPath + carPath
-    with open(carPath, "wb") as fp:
-        fp.write(b64decode(car))
-
+    with open(carPath, "wb") as f:
+        f.write(b64decode(car))
+    time.sleep(1)
     print(carPath)
     with open(carPath, 'rb') as fp:
         if not (fp):
