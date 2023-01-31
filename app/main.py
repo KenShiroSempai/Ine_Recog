@@ -132,7 +132,7 @@ async def logEnramada(item: logEnramada):
     conjunto = item.conjunto
     autorizo = item.autorizo
     car = item.car
-    guardia = item.guardia
+    guardia = item.guard
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
 
