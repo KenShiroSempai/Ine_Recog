@@ -159,9 +159,9 @@ async def logEnramada(item: logEnramada):
     make = "Error"
     m = "Error"
     color = "Error"
-    idPath = "/" + "idCard" + "_" + name + ".png"
-    facePath = "/" + "face" + "_" + name + ".png"
-    carPath = "/" + "car" + "_" + name + ".png"
+    idPath = "/" + "idCard" + "_" + name + ".jpg"
+    facePath = "/" + "face" + "_" + name + ".jpg"
+    carPath = "/" + "car" + "_" + name + ".jpg"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     newPath = newPath+"/"+timestamp 
