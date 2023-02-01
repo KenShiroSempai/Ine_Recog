@@ -74,7 +74,7 @@ async def logEnramada(item: logEnramada):
 
     with open(pathDefault, "wb") as f:
         f.write(b64decode(idCArd))
-    with open(pathDefault, "wb") as f:
+    with open(pathDefault2, "wb") as f:
         f.write(b64decode(car))
         f.close()
     aux, op = idk(pathDefault)
