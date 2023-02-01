@@ -54,77 +54,13 @@ class Item(BaseModel):
     url: str    # String del cual se va a generar el QR
 
 
-class Refren(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-    img: str
-    name: str
-    tag: str
-
-
-class Re(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-    qr: str
-    tag: str
-    status: str
-
-
-@app.get("/refrendo2/{tag}/{photo}")
-async def retorna_TagPhoto(tag, photo):
-    """Monitorear el procesamiento.
-
-    Metodo exclusivo para regresar las imagenes
-    de tal modo de ver los reultados
-    """
-    try:
-        path = str(tag) + "/" + str(photo)
-    except Exception as ex:
-        return {"error": ex.args}
-    try:
-        print("app/tag/{path}")
-        return responses.FileResponse(f"app/tag/{path}")
-    except Exception as ex:
-        return {"error": ex.args}
-
-
-@app.get("/refrendoo/{photo}")
-async def retorna_Tag(photo):
-    """Monitorear el procesamiento.
-
-    Metodo exclusivo para regresar las imagenes
-    de tal modo de ver los reultados
-    """
-    try:
-        tag = int(photo)
-    except Exception as ex:
-        return {"error": ex.args}
-    newPath = "app/tag/"+str(tag)
-    if not (os.path.exists(newPath)):
-        return {"ERROR": "No hay fotos de ese tag"}
-    onlyfiles = [f for f in listdir(newPath) if isfile(join(newPath, f))]
-    onlyfiles.sort()
-    js = {}
-
-    num = len(onlyfiles)
-    for i in range(1, num+1):
-        js[str(i)] = "http://localhost:4999/refrendo2/" + \
-            str(tag)+"/"+str(onlyfiles[num-i])
-    return js
-
-
 @app.post("/enramadalog")
 async def logEnramada(item: logEnramada):
 
     lista = []
 
     pathDefault = "app/imgAPI/0.jpg"
+    pathDefault2 = "app/imgAPI/5.jpg"
     building = item.building
     floor = item.floor
     idCArd = item.idCArd
@@ -138,6 +74,9 @@ async def logEnramada(item: logEnramada):
 
     with open(pathDefault, "wb") as f:
         f.write(b64decode(idCArd))
+    with open(pathDefault, "wb") as f:
+        f.write(b64decode(car))
+        f.close()
     aux, op = idk(pathDefault)
     print(aux)
     if not op:
@@ -179,7 +118,7 @@ async def logEnramada(item: logEnramada):
         f.write(b64decode(face))
 
     print(carPath)
-    with open(carPath, 'rb') as fp:
+    with open(pathDefault2, 'rb') as fp:
         if not (fp):
             plate = "Error de archivo"
             make = "Error de archivo"
@@ -291,45 +230,54 @@ async def borrar_whatsQr():
     return {"msg": "No hay archivo para eliminar"}
 
 
-@app.post("/refrendo")
-async def postRefrendo(item: Re):
-    print(item.tag + "  " + item.status+"  "+item.qr)
-    postLomas(tag=item.tag, qr=item.qr, status=item.status)
+@app.post("/debug")
+async def debug(item: Item):
 
+    lista = []
 
-@app.post("/reporte")
-async def postRefrendo(item: Re):
-    postLomas(tag=item.tag, qr=item.qr)
+    pathDefault = "app/imgAPI/0.jpg"
+    idCArd = item.url
 
+    with open(pathDefault, "wb") as f:
+        f.write(b64decode(idCArd))
+        f.close()
+ 
 
-@app.post('/base64')
-def file_upload(item: Refren):
-    newPath = "app/tag/"+item.tag+"/"
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    name = item.name
-    if (os.path.isfile(newPath + name)):
-        name = "refrendo2023__" + time.strftime("%Y%m%d-%H%M%S")+".png"
-    with open(newPath + name, "wb") as f:
-        f.write(b64decode(item.img))
+    print(pathDefault)
+    with open(pathDefault, 'rb') as fp:
+        if not (fp):
+            plate = "Error de archivo"
+            make = "Error de archivo"
+            m = "Error de archivo"
+            color = "Error de archivo"
+        else:
+            print("paso el plate")
+            try:
+                response = requests.post(
+                    'https://api.platerecognizer.com/v1/plate-reader/',
+                    data=dict(regions=['mx', 'us-ca'], mmc=True),
+                    files=dict(upload=fp),
+                    headers={'Authorization': 'Token '+token})
+                tmp = json.dumps(response.json())
+                print(tmp)
+                f = open("apiResponse.json", "w")
+                f.write(tmp)
+                f.close()
+                if (json.loads(tmp)["results"]):
+                    plate = (json.loads(tmp)["results"][0]["plate"])
+                    make = (json.loads(tmp)["results"][0]["model_make"][0]["make"])
+                    m = (json.loads(tmp)["results"][0]["model_make"][0]["model"])
+                    color = (json.loads(tmp)["results"][0]["color"][0]["color"])
+            except requests.exceptions.ConnectionError:
+                print("Fallo de coneccion")
 
+    lista.extend([ plate,make,m,color, "FALTA DE ANTENA/HANDHELD", "FALSE"])
+    with open("app/Enramada/" + 'log.csv', 'a') as f_object:
+        writer_object = writer(f_object)
+        writer_object.writerow(lista)
+        f_object.close()
+    return {"msg": "ok"}
 
-def postLomas(tag: str, qr: str, status: str):
-    aux = r'file://192.168.2.202/Files/tagsRefrendo/'
-    # aux = file://192.168.1.202/Files/tagsRefrendo/
-    js = {
-        "tag": tag,
-        "url": aux + tag + "/",
-        "estado": status
-    }
-    js2 = {
-        "tag": tag,
-        "qr": qr
-    }
-    url = "http://192.168.1.202:3001/tag/odoo"
-    url2 = "http://192.168.1.202:3001/tag/odoo/qr"
-    response = requests.post(url, json=js)
-    response = requests.post(url2, json=js2)
 
 def logEn():
     print("oda")
