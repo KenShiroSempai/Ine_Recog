@@ -60,7 +60,7 @@ async def logEnramada(item: logEnramada):
     lista = []
 
     pathDefault = "app/imgAPI/0.jpg"
-    pathDefault2 = "app/plate/0.jpg"
+    pathDefault2 = "app/imgAPI/5.jpg"
     building = item.building
     floor = item.floor
     idCArd = item.idCArd
