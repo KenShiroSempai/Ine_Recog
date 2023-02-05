@@ -71,6 +71,9 @@ async def logEnramada(item: logEnramada):
     guardia = item.guard
 
     timestamp = time.strftime("%Y%m%d-%H%M%S")
+    newPath = "app/plate"
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
 
     with open(pathDefault, "wb") as f:
         f.write(b64decode(idCArd))
