@@ -10,6 +10,7 @@ services:
         - /mnt/disk2/fotosID:/app/app/img
         - /mnt/disk2/samba/files/tagsRefrendo:/app/app/tag
         - /mnt/disk2/bitacoraIO:/app/app/Enramada
+        - /mnt/disk2/bitacoraIO:/app/app/Bitacora
     restart: always
     environment:
       - TZ=America/Mexico_City
