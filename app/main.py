@@ -174,70 +174,7 @@ async def logEnramada(item: logEnramada):
 
 @app.post("/logcarless")
 async def logGral(item: logCarless):
-    # (building,floor,idCArd,face,conjunto,autorizo,guardia,origen)
     _thread.start_new_thread( logCarLess, (item.building, item.floor,item.idCArd,item.face,item.conjunto,item.autorizo,item.guard,item.origen, ) )
-    # lista = []
-
-    # pathDefault = "app/imgAPI/0.jpg"
-    # building = item.building
-    # floor = item.floor
-    # idCArd = item.idCArd
-    # face = item.face
-    # conjunto = item.conjunto
-    # autorizo = item.autorizo
-    # guardia = item.guard
-
-    # timestamp = time.strftime("%Y%m%d-%H%M%S")
-    # newPath = "app/Bitacora/"+conjunto
-    # if not (os.path.exists(newPath)):
-    #     os.mkdir(newPath)
-
-    # with open(pathDefault, "wb") as f:
-    #     f.write(b64decode(idCArd))
-    #     f.close()
-    # aux, op = idk(pathDefault)
-    # print(aux)
-    # if not op:
-    #     aux["clave"] = timestamp
-    #     aux["name"] = "EMPTY"
-    #     name = timestamp + ".jpg"
-    #     cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
-    #                 cv2.imread("app/imgAPI/0.jpg"))
-    # else:
-    #     name = aux["name"]
-    # newPath = "app/Bitacora/" + conjunto
-    # if not (os.path.exists(newPath)):
-    #     os.mkdir(newPath)
-    # newPath = newPath+"/"+building
-    # if not (os.path.exists(newPath)):
-    #     os.mkdir(newPath)
-    # newPath = newPath +"/"+floor
-    # if not (os.path.exists(newPath)):
-    #     os.mkdir(newPath)
-    # plate = "No Disponible"
-    # make = "No Disponible"
-    # m = "No Disponible"
-    # color = "No Disponible"
-    # idPath = "/" + "idCard" + "_" + name + ".jpg"
-    # facePath = "/" + "face" + "_" + name + ".jpg"
-    # carPath = "/" + "car" + "_" + name + ".jpg"
-    # if not (os.path.exists(newPath)):
-    #     os.mkdir(newPath)
-    # newPath = newPath+"/"+timestamp 
-    # if not (os.path.exists(newPath)):
-    #     os.mkdir(newPath)
-    # carPath = newPath + carPath
-    # with open(newPath + idPath, "wb") as f:
-    #     f.write(b64decode(idCArd))
-    # with open(newPath + facePath, "wb") as f:
-    #     f.write(b64decode(face))
-    # print(carPath)
-    # lista.extend([item.origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-    #              facePath, plate.upper(),make,m,color,guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    # with open("app/Bitacora/" +conjunto+"/"+ 'log.csv', 'a') as f_object:
-    #     writer_object = writer(f_object)
-    #     writer_object.writerow(lista)
-    #     f_object.close()
     return {"msg": "ok"}
 
 
@@ -369,6 +306,8 @@ async def debug(item: Item):
 def logCarLess(building,floor,idCArd,face,conjunto,autorizo,guardia,origen):
     lista = []
     pathDefault = "app/imgAPI/0.jpg"
+    year = time.strftime("%Y%m%d")
+    timeMin = time.strftime("%H%M%S")
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     newPath = "app/Bitacora/"+conjunto
     if not (os.path.exists(newPath)):
@@ -405,7 +344,10 @@ def logCarLess(building,floor,idCArd,face,conjunto,autorizo,guardia,origen):
     carPath = "/" + "car" + "_" + name + ".jpg"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath+"/"+timestamp 
+    newPath = newPath+"/"+year 
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    newPath = newPath+"/"+timeMin 
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     carPath = newPath + carPath

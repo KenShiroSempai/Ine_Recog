@@ -14,3 +14,5 @@ git clone https://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@github.com/guyacamole
 
 
 git clone https://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@github.com/guyacamole/plates.git
+
+git clone https://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@github.com/guyacamole/ApiZkt.git
