@@ -316,12 +316,11 @@ async def debug(item: Item):
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen):
     data = {}
     filename = 'data.json'
-    listObj = []
     lista = []
     pathDefault = "app/imgAPI/0.jpg"
     year = time.strftime("%Y")
     mont = time.strftime("%m")
-    day = time.strftime("%d")
+    day = time.strftime("%Y%m%d")
     timeMin = time.strftime("%H%M%S")
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     newPath = "app/Bitacora/"+conjunto
@@ -332,7 +331,6 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
         f.write(b64decode(idCArd))
         f.close()
     aux, op = idk(pathDefault)
-    print(aux)
     if not op:
         aux["clave"] = timestamp
         aux["name"] = "EMPTY"
@@ -376,7 +374,6 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
         f.write(b64decode(idCArd))
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
-    print(carPath)
     lista.extend([origen, conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
                  facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Bitacora/" + conjunto+"/" + 'log.csv', 'a') as f_object:
@@ -388,24 +385,14 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
             data = json.load(file)
     if not conjunto in data:
         data[conjunto] = {}
-        print("add conjunto")
     if not building in data[conjunto]:
         data[conjunto][building] = {}
-        print("add building")
     if not floor in data[conjunto][building]:
         data[conjunto][building][floor] = {}
-        print("add floor")
-    if not year in data[conjunto][building][floor]:
-        data[conjunto][building][floor][year] = {}
-        print("add year")
-    if not mont in data[conjunto][building][floor][year]:
-        data[conjunto][building][floor][year][mont] = {}
-        print("add mont")
-    if not day in data[conjunto][building][floor][year][mont]:
-        data[conjunto][building][floor][year][mont][day] = {}
-        print("add day")
-    if not timeMin in data[conjunto][building][floor][year][mont][day]:
-        data[conjunto][building][floor][year][mont][day][timeMin] = {"marca": make,
+    if not day in data[conjunto][building][floor]:
+        data[conjunto][building][floor][day] = {}
+    if not timeMin in data[conjunto][building][floor][day]:
+        data[conjunto][building][floor][day][timeMin] = {"marca": make,
                                                                      "origen": origen,
                                                                      "time": str(timestamp),
                                                                      "autorizo": autorizo,
@@ -413,13 +400,8 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
                                                                      "model": m,
                                                                      "guardia": guardia
                                                                      }
-        print("add Visit")
-
     jss = json.dumps(data)
     f = open("data.json", "w")
     f.write(jss)
     f.close()
-    with open("data_file.json", "w") as write_file:
-        json.dump(data, write_file)
 
-    return {"msg": "ok"}
