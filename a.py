@@ -294,3 +294,34 @@ def main():
 
 
 main()
+
+    if os.path.exists(filename):
+        with open(filename, "r") as file:
+            data = json.load(file)
+    if not conjunto in data:
+        data[conjunto] = {}
+        print("add conjunto")
+    if not building in data[conjunto]:
+        data[conjunto][building] = {}
+        print("add building")
+    if not floor in data[conjunto][building]:
+        data[conjunto][building][floor] = {}
+        print("add floor")
+    if not year in data[conjunto][building][floor]:
+        data[conjunto][building][floor][year] = {}
+        print("add year")
+    if not mont in data[conjunto][building][floor][year]:
+        data[conjunto][building][floor][year][mont] = {}
+        print("add mont")
+    if not day in data[conjunto][building][floor][year][mont]:
+        data[conjunto][building][floor][year][mont][day] = {}
+        print("add day")
+
+                 {timeMin: {"marca": make,
+                            "origen": origen,
+                            "time": str(timestamp),
+                            "autorizo": autorizo,
+                            "name": aux["name"],
+                            "model": m,
+                            "guardia": guardia
+                            }}

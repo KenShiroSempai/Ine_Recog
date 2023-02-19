@@ -15,13 +15,14 @@ import os
 import cv2
 from base64 import b64decode
 import time
-from os.path import isfile, join
 from pathlib import Path
-from os import listdir, unlink
+from os import path
 from csv import writer
 import json
 import time
 import _thread
+import json
+import os
 
 token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
@@ -40,9 +41,10 @@ class logEnramada(BaseModel):
     idCArd: str
     face: str
     autorizo: str
-    car:str
-    origen:str
-    guard:str
+    car: str
+    origen: str
+    guard: str
+
 
 class logCarless(BaseModel):
     """Objeto a recivir en el apartado de QR.
@@ -56,8 +58,8 @@ class logCarless(BaseModel):
     idCArd: str
     face: str
     autorizo: str
-    origen:str
-    guard:str
+    origen: str
+    guard: str
 
 
 class Item(BaseModel):
@@ -112,7 +114,7 @@ async def logEnramada(item: logEnramada):
     newPath = newPath+"/"+building
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath +"/"+floor
+    newPath = newPath + "/"+floor
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     plate = "Error"
@@ -124,7 +126,7 @@ async def logEnramada(item: logEnramada):
     carPath = "/" + "car" + "_" + name + ".jpg"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath+"/"+timestamp 
+    newPath = newPath+"/"+timestamp
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     carPath = newPath + carPath
@@ -158,23 +160,28 @@ async def logEnramada(item: logEnramada):
                 f.close()
                 if (json.loads(tmp)["results"]):
                     plate = (json.loads(tmp)["results"][0]["plate"])
-                    make = (json.loads(tmp)["results"][0]["model_make"][0]["make"])
-                    m = (json.loads(tmp)["results"][0]["model_make"][0]["model"])
-                    color = (json.loads(tmp)["results"][0]["color"][0]["color"])
+                    make = (json.loads(tmp)["results"]
+                            [0]["model_make"][0]["make"])
+                    m = (json.loads(tmp)["results"][0]
+                         ["model_make"][0]["model"])
+                    color = (json.loads(tmp)["results"]
+                             [0]["color"][0]["color"])
             except requests.exceptions.ConnectionError:
                 print("Fallo de coneccion")
 
-    lista.extend([item.origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, plate.upper(),make,m,color,guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
+    lista.extend([item.origen, conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
+                 facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
         f_object.close()
     return {"msg": "ok"}
 
+
 @app.post("/logcarless")
 async def logGral(item: logCarless):
-    _thread.start_new_thread( logCarLess, (item.building, item.floor,item.idCArd,item.face,item.conjunto,item.autorizo,item.guard,item.origen, ) )
+    _thread.start_new_thread(logCarLess, (item.building, item.floor, item.idCArd,
+                             item.face, item.conjunto, item.autorizo, item.guard, item.origen, ))
     return {"msg": "ok"}
 
 
@@ -184,6 +191,7 @@ async def root():
 
     se usa esta ruta para ver si la API esta en linea antes de hacer pruebas
     """
+    print("boton")
     return {"Estado": "Funcionando"}
 
 
@@ -265,7 +273,6 @@ async def debug(item: Item):
     with open(pathDefault, "wb") as f:
         f.write(b64decode(idCArd))
         f.close()
- 
 
     print(pathDefault)
     with open(pathDefault, 'rb') as fp:
@@ -289,13 +296,16 @@ async def debug(item: Item):
                 f.close()
                 if (json.loads(tmp)["results"]):
                     plate = (json.loads(tmp)["results"][0]["plate"])
-                    make = (json.loads(tmp)["results"][0]["model_make"][0]["make"])
-                    m = (json.loads(tmp)["results"][0]["model_make"][0]["model"])
-                    color = (json.loads(tmp)["results"][0]["color"][0]["color"])
+                    make = (json.loads(tmp)["results"]
+                            [0]["model_make"][0]["make"])
+                    m = (json.loads(tmp)["results"][0]
+                         ["model_make"][0]["model"])
+                    color = (json.loads(tmp)["results"]
+                             [0]["color"][0]["color"])
             except requests.exceptions.ConnectionError:
                 print("Fallo de coneccion")
 
-    lista.extend([ plate,make,m,color, "FALTA DE ANTENA/HANDHELD", "FALSE"])
+    lista.extend([plate, make, m, color, "FALTA DE ANTENA/HANDHELD", "FALSE"])
     with open("app/Enramada/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
@@ -303,10 +313,15 @@ async def debug(item: Item):
     return {"msg": "ok"}
 
 
-def logCarLess(building,floor,idCArd,face,conjunto,autorizo,guardia,origen):
+def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen):
+    data = {}
+    filename = 'data.json'
+    listObj = []
     lista = []
     pathDefault = "app/imgAPI/0.jpg"
-    year = time.strftime("%Y%m%d")
+    year = time.strftime("%Y")
+    mont = time.strftime("%m")
+    day = time.strftime("%d")
     timeMin = time.strftime("%H%M%S")
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     newPath = "app/Bitacora/"+conjunto
@@ -332,7 +347,7 @@ def logCarLess(building,floor,idCArd,face,conjunto,autorizo,guardia,origen):
     newPath = newPath+"/"+building
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath +"/"+floor
+    newPath = newPath + "/"+floor
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     plate = "No Disponible"
@@ -344,10 +359,16 @@ def logCarLess(building,floor,idCArd,face,conjunto,autorizo,guardia,origen):
     carPath = "/" + "car" + "_" + name + ".jpg"
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath+"/"+year 
+    newPath = newPath+"/"+year
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
-    newPath = newPath+"/"+timeMin 
+    newPath = newPath+"/"+mont
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    newPath = newPath+"/"+day
+    if not (os.path.exists(newPath)):
+        os.mkdir(newPath)
+    newPath = newPath+"/"+timeMin
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     carPath = newPath + carPath
@@ -356,10 +377,49 @@ def logCarLess(building,floor,idCArd,face,conjunto,autorizo,guardia,origen):
     with open(newPath + facePath, "wb") as f:
         f.write(b64decode(face))
     print(carPath)
-    lista.extend([origen,conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, plate.upper(),make,m,color,guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    with open("app/Bitacora/" +conjunto+"/"+ 'log.csv', 'a') as f_object:
+    lista.extend([origen, conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
+                 facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
+    with open("app/Bitacora/" + conjunto+"/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
         f_object.close()
+    if os.path.exists(filename):
+        with open(filename, "r") as file:
+            data = json.load(file)
+    if not conjunto in data:
+        data[conjunto] = {}
+        print("add conjunto")
+    if not building in data[conjunto]:
+        data[conjunto][building] = {}
+        print("add building")
+    if not floor in data[conjunto][building]:
+        data[conjunto][building][floor] = {}
+        print("add floor")
+    if not year in data[conjunto][building][floor]:
+        data[conjunto][building][floor][year] = {}
+        print("add year")
+    if not mont in data[conjunto][building][floor][year]:
+        data[conjunto][building][floor][year][mont] = {}
+        print("add mont")
+    if not day in data[conjunto][building][floor][year][mont]:
+        data[conjunto][building][floor][year][mont][day] = {}
+        print("add day")
+    if not timeMin in data[conjunto][building][floor][year][mont][day]:
+        data[conjunto][building][floor][year][mont][day][timeMin] = {"marca": make,
+                                                                     "origen": origen,
+                                                                     "time": str(timestamp),
+                                                                     "autorizo": autorizo,
+                                                                     "name": aux["name"],
+                                                                     "model": m,
+                                                                     "guardia": guardia
+                                                                     }
+        print("add Visit")
+
+    jss = json.dumps(data)
+    f = open("data.json", "w")
+    f.write(jss)
+    f.close()
+    with open("data_file.json", "w") as write_file:
+        json.dump(data, write_file)
+
     return {"msg": "ok"}
