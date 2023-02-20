@@ -191,7 +191,6 @@ async def root():
 
     se usa esta ruta para ver si la API esta en linea antes de hacer pruebas
     """
-    print("boton")
     return {"Estado": "Funcionando"}
 
 
@@ -260,6 +259,24 @@ async def borrar_whatsQr():
         file_to_rem.unlink()
         return {"msg": "Archivo eliminado"}
     return {"msg": "No hay archivo para eliminar"}
+
+
+@app.get("/adentro/")
+async def returnJS():
+    """Borrar Qr generado.
+
+    Metodo para uso exclusivo de el bot de whatsapp, borra la imagen que este
+    generada en caso de que no exista el archivo, retorna un mensaje diciendo
+    que no existe.
+    """
+    filename = 'data.json'
+    if not os.path.exists(filename):
+        print("mamo")
+        return {}
+    with open(filename, "r") as file:
+        data = json.load(file)
+
+    return data
 
 
 @app.post("/debug")
