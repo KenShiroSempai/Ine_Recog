@@ -46,6 +46,18 @@ class logEnramada(BaseModel):
     guard: str
 
 
+class deleteLog(BaseModel):
+    """Objeto a recivir en el apartado de QR.
+
+    Se hizo una clase en para que en un futuro, si se quieren aumentar los
+    parametros sea mas sencillo.
+    """
+    building: str
+    floor: str
+    conjunto: str
+    date : str
+    time :str
+
 class logCarless(BaseModel):
     """Objeto a recivir en el apartado de QR.
 
@@ -60,6 +72,7 @@ class logCarless(BaseModel):
     autorizo: str
     origen: str
     guard: str
+    reason: str
 
 
 class Item(BaseModel):
@@ -181,7 +194,7 @@ async def logEnramada(item: logEnramada):
 @app.post("/logcarless")
 async def logGral(item: logCarless):
     _thread.start_new_thread(logCarLess, (item.building, item.floor, item.idCArd,
-                             item.face, item.conjunto, item.autorizo, item.guard, item.origen, ))
+                             item.face, item.conjunto, item.autorizo, item.guard, item.origen, item.reason))
     return {"msg": "ok"}
 
 
@@ -330,7 +343,7 @@ async def debug(item: Item):
     return {"msg": "ok"}
 
 
-def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen):
+def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
     data = {}
     filename = 'data.json'
     lista = []
@@ -338,7 +351,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     year = time.strftime("%Y")
     mont = time.strftime("%m")
     day = time.strftime("%Y%m%d")
-    timeMin = time.strftime("%H%M%S")
+    timeMin = time.strftime("%H%M%S") + " "+reason
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     newPath = "app/Bitacora/"+conjunto
     if not (os.path.exists(newPath)):
@@ -410,15 +423,15 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
         data[conjunto][building][floor][day] = {}
     if not timeMin in data[conjunto][building][floor][day]:
         data[conjunto][building][floor][day][timeMin] = {"marca": make,
-                                                                     "origen": origen,
-                                                                     "time": str(timestamp),
-                                                                     "autorizo": autorizo,
-                                                                     "name": aux["name"],
-                                                                     "model": m,
-                                                                     "guardia": guardia
-                                                                     }
+                                                         "origen": origen,
+                                                         "time": str(timestamp),
+                                                         "autorizo": autorizo,
+                                                         "name": aux["nombre"] + aux["paterno"],
+                                                         "model": m,
+                                                         "guardia": guardia,
+                                                         "motivo": reason
+                                                         }
     jss = json.dumps(data)
     f = open("data.json", "w")
     f.write(jss)
     f.close()
-
