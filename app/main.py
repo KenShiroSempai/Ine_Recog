@@ -197,6 +197,21 @@ async def logGral(item: logCarless):
                              item.face, item.conjunto, item.autorizo, item.guard, item.origen, item.reason))
     return {"msg": "ok"}
 
+@app.post("/ppOut")
+async def ppOut(item: deleteLog):
+    filename = 'data.json'
+    if not os.path.exists(filename):
+        return {"msg":"no funciono"}
+    with open(filename, "r") as file:
+        data = json.load(file)
+    if not item.time in data[item.conjunto][item.building][item.floor][item.date]:
+        return {"msg":"no funciono"}
+    del data[item.conjunto][item.building][item.floor][item.date][item.time]
+    with open(filename, "w") as f:
+        json.dump(data, f)
+    
+
+
 
 @app.get("/")
 async def root():
