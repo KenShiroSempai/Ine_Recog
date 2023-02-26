@@ -148,7 +148,7 @@ def ine1(img):
         name.remove("NOMBRE")
     if "NCMPRE" in name:
         name.remove("NCMPRE")
-    
+
     if (len(name[0]) < 3):
         name.pop(0)
     pat = name[0]
@@ -194,8 +194,10 @@ def lic(img):
     if (len(name[0]) < 3):
         name.pop(0)
     for tmp in name:
-        if not (tmp[0:3]=="Lic"):
+        if not (tmp[0:3] == "Lic"):
             au += tmp.split()
+    if (len(au) < 3):
+        return js, False
     js["materno"] = au[len(au)-1]
     au.pop(len(au)-1)
     js["paterno"] = au[len(au)-1]
@@ -217,8 +219,10 @@ def lic(img):
     print(elector)
     if len(elector) == 1:
         ape = elector[0]
+
     js["clave"] = ape
-    js["name"] = js["paterno"] + "_" + js["materno"]+ "_" + js["nombre"]+ "_" + js["clave"]
+    js["name"] = js["paterno"] + "_" + js["materno"] + \
+        "_" + js["nombre"] + "_" + js["clave"]
     return js, True
 
 

@@ -2,11 +2,14 @@
 
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
-from fastapi import FastAPI, File, UploadFile, responses, Form
+from fastapi import FastAPI, File, UploadFile, responses
+from fastapi.responses import FileResponse
 import aiofiles
 import requests
 from app.recognition.ine import idk
-from pydantic import BaseModel
+from app.extras.tags import listOfTag
+from app.extras.struct import *
+from app.logs.logs import logCarLess
 import qrcode
 from PIL import Image
 import pathlib
@@ -24,66 +27,11 @@ import _thread
 import json
 import os
 
+
+
 token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
 app = FastAPI()
-
-
-class logEnramada(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-    building: str
-    floor: str
-    conjunto: str
-    idCArd: str
-    face: str
-    autorizo: str
-    car: str
-    origen: str
-    guard: str
-
-
-class deleteLog(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-    building: str
-    floor: str
-    conjunto: str
-    date : str
-    time :str
-
-class logCarless(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-    building: str
-    floor: str
-    conjunto: str
-    idCArd: str
-    face: str
-    autorizo: str
-    origen: str
-    guard: str
-    reason: str
-
-
-class Item(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-
-    url: str    # String del cual se va a generar el QR
-
 
 @app.post("/enramadalog")
 async def logEnramada(item: logEnramada):
@@ -199,7 +147,7 @@ async def logGral(item: logCarless):
 
 @app.post("/ppOut")
 async def ppOut(item: deleteLog):
-    filename = 'data.json'
+    filename = 'app/Bitacora/data.json'
     if not os.path.exists(filename):
         return {"msg":"no funciono"}
     with open(filename, "r") as file:
@@ -210,8 +158,6 @@ async def ppOut(item: deleteLog):
     with open(filename, "w") as f:
         json.dump(data, f)
     
-
-
 
 @app.get("/")
 async def root():
@@ -255,6 +201,16 @@ async def retorna_Img(photo):
         return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}
 
+@app.get("/tags",response_class=FileResponse)
+async def returnTags(item:tagRange):
+    """Loop Tags
+
+    Ingresas inicio y fin de el rango que quieres obtener y te retorna el archivo
+    """
+    listOfTag(item.ini,item.fin)
+    return FileResponse("app/Bitacora/tag.txt")
+
+
 
 @app.post("/qr/")
 async def create_whatsQr(item: Item):
@@ -297,7 +253,7 @@ async def returnJS():
     generada en caso de que no exista el archivo, retorna un mensaje diciendo
     que no existe.
     """
-    filename = 'data.json'
+    filename = 'app/Bitacora/data.json'
     if not os.path.exists(filename):
         print("mamo")
         return {}
@@ -358,95 +314,4 @@ async def debug(item: Item):
     return {"msg": "ok"}
 
 
-def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
-    data = {}
-    filename = 'data.json'
-    lista = []
-    pathDefault = "app/imgAPI/0.jpg"
-    year = time.strftime("%Y")
-    mont = time.strftime("%m")
-    day = time.strftime("%Y%m%d")
-    timeMin = time.strftime("%H%M%S") + " "+reason
-    timestamp = time.strftime("%Y%m%d-%H%M%S")
-    newPath = "app/Bitacora/"+conjunto
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
 
-    with open(pathDefault, "wb") as f:
-        f.write(b64decode(idCArd))
-        f.close()
-    aux, op = idk(pathDefault)
-    if not op:
-        aux["clave"] = timestamp
-        aux["name"] = "EMPTY"
-        name = timestamp + ".jpg"
-        cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
-                    cv2.imread("app/imgAPI/0.jpg"))
-    else:
-        name = aux["name"]
-    newPath = "app/Bitacora/" + conjunto
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+building
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath + "/"+floor
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    plate = "No Disponible"
-    make = "No Disponible"
-    m = "No Disponible"
-    color = "No Disponible"
-    idPath = "/" + "idCard" + "_" + name + ".jpg"
-    facePath = "/" + "face" + "_" + name + ".jpg"
-    carPath = "/" + "car" + "_" + name + ".jpg"
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+year
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+mont
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+day
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+timeMin
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    carPath = newPath + carPath
-    with open(newPath + idPath, "wb") as f:
-        f.write(b64decode(idCArd))
-    with open(newPath + facePath, "wb") as f:
-        f.write(b64decode(face))
-    lista.extend([origen, conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    with open("app/Bitacora/" + conjunto+"/" + 'log.csv', 'a') as f_object:
-        writer_object = writer(f_object)
-        writer_object.writerow(lista)
-        f_object.close()
-    if os.path.exists(filename):
-        with open(filename, "r") as file:
-            data = json.load(file)
-    if not conjunto in data:
-        data[conjunto] = {}
-    if not building in data[conjunto]:
-        data[conjunto][building] = {}
-    if not floor in data[conjunto][building]:
-        data[conjunto][building][floor] = {}
-    if not day in data[conjunto][building][floor]:
-        data[conjunto][building][floor][day] = {}
-    if not timeMin in data[conjunto][building][floor][day]:
-        data[conjunto][building][floor][day][timeMin] = {"marca": make,
-                                                         "origen": origen,
-                                                         "time": str(timestamp),
-                                                         "autorizo": autorizo,
-                                                         "name": aux["nombre"] + aux["paterno"],
-                                                         "model": m,
-                                                         "guardia": guardia,
-                                                         "motivo": reason
-                                                         }
-    jss = json.dumps(data)
-    f = open("data.json", "w")
-    f.write(jss)
-    f.close()
