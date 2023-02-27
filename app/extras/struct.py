@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from dataclasses import dataclass
 
 
 class logEnramada(BaseModel):
@@ -46,6 +47,13 @@ class deleteLog(BaseModel):
     conjunto: str
     date: str
     time: str
+    origen : str
+    name : str
+    motivo : str
+    autorizo : str
+    guardia : str
+
+
 
 
 class logCarless(BaseModel):
@@ -75,7 +83,32 @@ class Item(BaseModel):
     url: str    # String del cual se va a generar el QR
 
 class tagRange(BaseModel):
-    """
+    """Rango de Tags
+
+    Inicio y fin del loop
     """
     ini : int
     fin : int
+
+@dataclass
+class kibanaLog():
+    """Estructura a usar en los log
+    """
+    #origen, conjunto, building, floor,timestamp,autorizo,name,idPath,facePath,plate,make,model,color,guardia,tag,preauth
+    origen:str
+    conjunto: str
+    building: str
+    floor: str
+    timestamp: str
+    name: str
+    autorizo: str
+    idPath: str
+    facePath: str
+    plate: str
+    make:str
+    model: str
+    color: str
+    guardia: str
+    tag: str
+    preauth: str
+

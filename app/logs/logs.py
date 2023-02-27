@@ -1,6 +1,7 @@
 import time
 import os
 from app.recognition.ine import idk
+from app.extras.struct import *
 from base64 import b64decode
 import cv2
 from csv import writer
@@ -99,3 +100,13 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     f = open(filename, "w")
     f.write(jss)
     f.close()
+
+def saveCsv(item:kibanaLog):
+    lista = []
+    lista.extend([item.origen, item.conjunto, item.building, item.floor, item.timestamp, item.autorizo, item.name, item.idPath,
+                 item.facePath, item.plate, item.make, item.model, item.color, item.guardia, item.tag, item.preauth])
+    with open("app/Bitacora/" + item.conjunto+"/" + 'log.csv', 'a') as f_object:
+        writer_object = writer(f_object)
+        writer_object.writerow(lista)
+        f_object.close()
+    print("webos")

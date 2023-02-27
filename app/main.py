@@ -9,6 +9,7 @@ import requests
 from app.recognition.ine import idk
 from app.extras.tags import listOfTag
 from app.extras.struct import *
+from app.logs.logs import *
 from app.logs.logs import logCarLess
 import qrcode
 from PIL import Image
@@ -28,10 +29,10 @@ import json
 import os
 
 
-
 token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
 app = FastAPI()
+
 
 @app.post("/enramadalog")
 async def logEnramada(item: logEnramada):
@@ -145,19 +146,27 @@ async def logGral(item: logCarless):
                              item.face, item.conjunto, item.autorizo, item.guard, item.origen, item.reason))
     return {"msg": "ok"}
 
+
 @app.post("/ppOut")
 async def ppOut(item: deleteLog):
     filename = 'app/Bitacora/data.json'
+
     if not os.path.exists(filename):
-        return {"msg":"no funciono"}
+        return {"msg": "no funciono"}
     with open(filename, "r") as file:
         data = json.load(file)
     if not item.time in data[item.conjunto][item.building][item.floor][item.date]:
-        return {"msg":"no funciono"}
+        return {"msg": "no funciono"}
     del data[item.conjunto][item.building][item.floor][item.date][item.time]
+    if (len(data[item.conjunto][item.building][item.floor][item.date]) < 2):
+        print("kill")
     with open(filename, "w") as f:
         json.dump(data, f)
-    
+    aux = kibanaLog(item.origen, item.conjunto, item.building, item.floor, item.time, item.name, item.autorizo,
+                    "SALIDA", "SALIDA", "SALIDA", "SALIDA", "SALIDA", "SALIDA", item.guardia, "SALIDA", "SALIDA")
+
+    saveCsv(aux)
+
 
 @app.get("/")
 async def root():
@@ -201,15 +210,16 @@ async def retorna_Img(photo):
         return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}
 
-@app.get("/tags",response_class=FileResponse)
-async def returnTags(item:tagRange):
+
+@app.get("/tags", response_class=FileResponse)
+async def returnTags(item: tagRange):
     """Loop Tags
 
     Ingresas inicio y fin de el rango que quieres obtener y te retorna el archivo
     """
-    listOfTag(item.ini,item.fin)
-    return FileResponse("app/Bitacora/tag.txt")
-
+    headers = {'Content-Disposition': 'attachment; filename="Book.xlsx"'}
+    listOfTag(item.ini, item.fin)
+    return FileResponse("app/Bitacora/tag.txt",headers=headers)
 
 
 @app.post("/qr/")
@@ -312,6 +322,3 @@ async def debug(item: Item):
         writer_object.writerow(lista)
         f_object.close()
     return {"msg": "ok"}
-
-
-
