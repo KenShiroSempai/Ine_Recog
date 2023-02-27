@@ -158,8 +158,10 @@ async def ppOut(item: deleteLog):
     if not item.time in data[item.conjunto][item.building][item.floor][item.date]:
         return {"msg": "no funciono"}
     del data[item.conjunto][item.building][item.floor][item.date][item.time]
-    if (len(data[item.conjunto][item.building][item.floor][item.date]) < 2):
-        print("kill")
+    if (len(data[item.conjunto][item.building][item.floor][item.date]) < 1):
+        del data[item.conjunto][item.building][item.floor][item.date]
+    if (len(data[item.conjunto][item.building][item.floor]) < 1):
+        del data[item.conjunto][item.building][item.floor]
     with open(filename, "w") as f:
         json.dump(data, f)
     aux = kibanaLog(item.origen, item.conjunto, item.building, item.floor, item.time, item.name, item.autorizo,
