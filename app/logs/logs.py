@@ -14,7 +14,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     pathDefault = "app/imgAPI/0.jpg"
     year = time.strftime("%Y")
     mont = time.strftime("%m")
-    day = time.strftime("%Y%m%d")
+    day = time.strftime("%d")
     timeMin = time.strftime("%H%M%S") + " "+reason
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     newPath = "app/Bitacora/"+conjunto
