@@ -5,7 +5,6 @@ Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 from fastapi import FastAPI, File, UploadFile, responses
 from fastapi.responses import FileResponse
 import aiofiles
-import requests
 from app.recognition.ine import idk
 from app.extras.tags import listOfTag
 from app.extras.struct import *
@@ -17,127 +16,13 @@ import pathlib
 from datetime import datetime
 import os
 import cv2
-from base64 import b64decode
-import time
-from pathlib import Path
-from os import path
-from csv import writer
 import json
-import time
 import _thread
-import json
-import os
 
 
 token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
 app = FastAPI()
-
-
-@app.post("/enramadalog")
-async def logEnramada(item: logEnramada):
-
-    lista = []
-
-    pathDefault = "app/imgAPI/0.jpg"
-    pathDefault2 = "app/plate/5.jpg"
-    building = item.building
-    floor = item.floor
-    idCArd = item.idCArd
-    face = item.face
-    conjunto = item.conjunto
-    autorizo = item.autorizo
-    car = item.car
-    guardia = item.guard
-
-    timestamp = time.strftime("%Y%m%d-%H%M%S")
-    newPath = "app/plate"
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-
-    with open(pathDefault, "wb") as f:
-        f.write(b64decode(idCArd))
-    with open(pathDefault2, "wb") as f:
-        f.write(b64decode(car))
-        f.close()
-    aux, op = idk(pathDefault)
-    print(aux)
-    if not op:
-        aux["clave"] = timestamp
-        aux["name"] = "EMPTY"
-        name = timestamp + ".jpg"
-        cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
-                    cv2.imread("app/imgAPI/0.jpg"))
-    else:
-        name = aux["name"]
-    newPath = "app/" + conjunto
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+building
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath + "/"+floor
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    plate = "Error"
-    make = "Error"
-    m = "Error"
-    color = "Error"
-    idPath = "/" + "idCard" + "_" + name + ".jpg"
-    facePath = "/" + "face" + "_" + name + ".jpg"
-    carPath = "/" + "car" + "_" + name + ".jpg"
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+timestamp
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    carPath = newPath + carPath
-    with open(carPath, "wb") as f:
-        f.write(b64decode(car))
-        f.close()
-    with open(newPath + idPath, "wb") as f:
-        f.write(b64decode(idCArd))
-    with open(newPath + facePath, "wb") as f:
-        f.write(b64decode(face))
-
-    print(carPath)
-    with open(pathDefault2, 'rb') as fp:
-        if not (fp):
-            plate = "Error de archivo"
-            make = "Error de archivo"
-            m = "Error de archivo"
-            color = "Error de archivo"
-        else:
-            print("paso el plate")
-            try:
-                response = requests.post(
-                    'https://api.platerecognizer.com/v1/plate-reader/',
-                    data=dict(regions=['mx', 'us-ca'], mmc=True),
-                    files=dict(upload=fp),
-                    headers={'Authorization': 'Token '+token})
-                tmp = json.dumps(response.json())
-                print(tmp)
-                f = open("apiResponse.json", "w")
-                f.write(tmp)
-                f.close()
-                if (json.loads(tmp)["results"]):
-                    plate = (json.loads(tmp)["results"][0]["plate"])
-                    make = (json.loads(tmp)["results"]
-                            [0]["model_make"][0]["make"])
-                    m = (json.loads(tmp)["results"][0]
-                         ["model_make"][0]["model"])
-                    color = (json.loads(tmp)["results"]
-                             [0]["color"][0]["color"])
-            except requests.exceptions.ConnectionError:
-                print("Fallo de coneccion")
-
-    lista.extend([item.origen, conjunto, building, floor, str(timestamp), autorizo, aux["name"], idPath,
-                 facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    with open("app/Enramada/" + 'log.csv', 'a') as f_object:
-        writer_object = writer(f_object)
-        writer_object.writerow(lista)
-        f_object.close()
-    return {"msg": "ok"}
 
 
 @app.post("/logcarless")
@@ -155,7 +40,7 @@ async def ppOut(item: deleteLog):
         return {"msg": "no funciono"}
     with open(filename, "r") as file:
         data = json.load(file)
-    if not item.time in data[item.conjunto][item.building][item.floor][item.date]:
+    if item.time not in data[item.conjunto][item.building][item.floor][item.date]:
         return {"msg": "no funciono"}
     del data[item.conjunto][item.building][item.floor][item.date][item.time]
     if (len(data[item.conjunto][item.building][item.floor][item.date]) < 1):
@@ -222,7 +107,7 @@ async def returnTags(item: tagRange):
     """
     headers = {'Content-Disposition': 'attachment; filename="Book.xlsx"'}
     listOfTag(item.ini, item.fin)
-    return FileResponse("app/Bitacora/tag.txt",headers=headers)
+    return FileResponse("app/Bitacora/tag.txt", headers=headers)
 
 
 @app.post("/qr/")
@@ -274,54 +159,3 @@ async def returnJS():
         data = json.load(file)
 
     return data
-
-
-@app.post("/debug")
-async def debug(item: Item):
-
-    lista = []
-
-    pathDefault = "app/imgAPI/0.jpg"
-    idCArd = item.url
-
-    with open(pathDefault, "wb") as f:
-        f.write(b64decode(idCArd))
-        f.close()
-
-    print(pathDefault)
-    with open(pathDefault, 'rb') as fp:
-        if not (fp):
-            plate = "Error de archivo"
-            make = "Error de archivo"
-            m = "Error de archivo"
-            color = "Error de archivo"
-        else:
-            print("paso el plate")
-            try:
-                response = requests.post(
-                    'https://api.platerecognizer.com/v1/plate-reader/',
-                    data=dict(regions=['mx', 'us-ca'], mmc=True),
-                    files=dict(upload=fp),
-                    headers={'Authorization': 'Token '+token})
-                tmp = json.dumps(response.json())
-                print(tmp)
-                f = open("apiResponse.json", "w")
-                f.write(tmp)
-                f.close()
-                if (json.loads(tmp)["results"]):
-                    plate = (json.loads(tmp)["results"][0]["plate"])
-                    make = (json.loads(tmp)["results"]
-                            [0]["model_make"][0]["make"])
-                    m = (json.loads(tmp)["results"][0]
-                         ["model_make"][0]["model"])
-                    color = (json.loads(tmp)["results"]
-                             [0]["color"][0]["color"])
-            except requests.exceptions.ConnectionError:
-                print("Fallo de coneccion")
-
-    lista.extend([plate, make, m, color, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    with open("app/Enramada/" + 'log.csv', 'a') as f_object:
-        writer_object = writer(f_object)
-        writer_object.writerow(lista)
-        f_object.close()
-    return {"msg": "ok"}

@@ -19,23 +19,6 @@ class logEnramada(BaseModel):
     guard: str
 
 
-class logEnramada(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-    building: str
-    floor: str
-    conjunto: str
-    idCArd: str
-    face: str
-    autorizo: str
-    car: str
-    origen: str
-    guard: str
-
-
 class deleteLog(BaseModel):
     """Objeto a recivir en el apartado de QR.
 
@@ -47,13 +30,11 @@ class deleteLog(BaseModel):
     conjunto: str
     date: str
     time: str
-    origen : str
-    name : str
-    motivo : str
-    autorizo : str
-    guardia : str
-
-
+    origen: str
+    name: str
+    motivo: str
+    autorizo: str
+    guardia: str
 
 
 class logCarless(BaseModel):
@@ -82,20 +63,21 @@ class Item(BaseModel):
 
     url: str    # String del cual se va a generar el QR
 
+
 class tagRange(BaseModel):
     """Rango de Tags
 
     Inicio y fin del loop
     """
-    ini : int
-    fin : int
+    ini: int
+    fin: int
+
 
 @dataclass
 class kibanaLog():
     """Estructura a usar en los log
     """
-    #origen, conjunto, building, floor,timestamp,autorizo,name,idPath,facePath,plate,make,model,color,guardia,tag,preauth
-    origen:str
+    origen: str
     conjunto: str
     building: str
     floor: str
@@ -105,10 +87,9 @@ class kibanaLog():
     idPath: str
     facePath: str
     plate: str
-    make:str
+    make: str
     model: str
     color: str
     guardia: str
     tag: str
     preauth: str
-
