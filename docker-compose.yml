@@ -6,6 +6,7 @@ services:
     ports:
       - "4999:8000"
     volumes:
+        - ./app/:/app/
         - /root/node/whabotapi/client/public:/app/app/qr
         - /mnt/disk2/fotosID:/app/app/img
         - /mnt/disk2/samba/files/tagsRefrendo:/app/app/tag
