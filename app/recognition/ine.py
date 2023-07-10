@@ -1,5 +1,5 @@
 import cv2
-from app.recognition.recognition import imageAlignment, extractT
+from recognition.recognition import imageAlignment, extractT
 from datetime import datetime
 
 # templates

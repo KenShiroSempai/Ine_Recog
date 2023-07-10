@@ -1,7 +1,7 @@
 import time
 import os
-from app.recognition.ine import idk
-from app.extras.struct import *
+from recognition.ine import idk
+from extras.struct import *
 from base64 import b64decode
 import cv2
 from csv import writer

@@ -5,10 +5,10 @@ Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 from fastapi import FastAPI, File, UploadFile, responses
 from fastapi.responses import FileResponse, JSONResponse
 import aiofiles
-from app.recognition.ine import idk
-from app.extras.tags import listOfTag
-from app.extras.struct import logCarless, deleteLog, Item, tagRange, kibanaLog
-from app.logs.logs import logCarLess, saveCsv
+from recognition.ine import idk
+from extras.tags import listOfTag
+from extras.struct import logCarless, deleteLog, Item, tagRange, kibanaLog
+from logs.logs import logCarLess, saveCsv
 import qrcode
 from PIL import Image
 import pathlib
