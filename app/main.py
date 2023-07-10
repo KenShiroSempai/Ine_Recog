@@ -2,7 +2,7 @@
 
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
-from fastapi import FastAPI, File, UploadFile, responses
+from fastapi import FastAPI, File, UploadFile, responses, Response
 from fastapi.responses import FileResponse
 import aiofiles
 from app.recognition.ine import idk
@@ -90,7 +90,7 @@ async def subir_identification(file: UploadFile = File(...)):
                         ".jpg", cv2.imread("app/imgAPI/0.jpg"))
             return op
         print(aux)
-        return aux
+        return Response(content=aux, media_type="application/json")
 
 
 @app.get("/img/{photo}")
