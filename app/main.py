@@ -2,8 +2,8 @@
 
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
-from fastapi import FastAPI, File, UploadFile, responses, Response
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, File, UploadFile, responses
+from fastapi.responses import FileResponse, JSONResponse
 import aiofiles
 from app.recognition.ine import idk
 from app.extras.tags import listOfTag
@@ -91,7 +91,7 @@ async def subir_identification(file: UploadFile = File(...)):
             return op
         print(aux)
         headers = {"Access-Control-Allow-Origin": "*"}
-        return Response(content=aux, media_type="application/json", headers=headers)
+        return JSONResponse(content=aux, headers=headers)
 
 
 @app.get("/img/{photo}")
