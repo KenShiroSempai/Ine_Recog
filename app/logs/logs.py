@@ -7,6 +7,7 @@ import cv2
 from csv import writer
 import json
 
+
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
     data = {}
     filename = 'app/Bitacora/data.json'
@@ -78,15 +79,15 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     if os.path.exists(filename):
         with open(filename, "r") as file:
             data = json.load(file)
-    if not conjunto in data:
+    if conjunto not in data:
         data[conjunto] = {}
-    if not building in data[conjunto]:
+    if building not in data[conjunto]:
         data[conjunto][building] = {}
-    if not floor in data[conjunto][building]:
+    if floor not in data[conjunto][building]:
         data[conjunto][building][floor] = {}
-    if not day in data[conjunto][building][floor]:
+    if day not in data[conjunto][building][floor]:
         data[conjunto][building][floor][day] = {}
-    if not timeMin in data[conjunto][building][floor][day]:
+    if timeMin not in data[conjunto][building][floor][day]:
         data[conjunto][building][floor][day][timeMin] = {"marca": make,
                                                          "origen": origen,
                                                          "time": str(timestamp),
