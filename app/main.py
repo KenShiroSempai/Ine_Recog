@@ -7,9 +7,8 @@ from fastapi.responses import FileResponse
 import aiofiles
 from app.recognition.ine import idk
 from app.extras.tags import listOfTag
-from app.extras.struct import *
-from app.logs.logs import *
-from app.logs.logs import logCarLess
+from app.extras.struct import logCarless, deleteLog, Item, tagRange, kibanaLog
+from app.logs.logs import logCarLess, saveCsv
 import qrcode
 from PIL import Image
 import pathlib
@@ -116,7 +115,8 @@ async def retorna_Img(photo):
 async def returnTags(item: tagRange):
     """Loop Tags
 
-    Ingresas inicio y fin de el rango que quieres obtener y te retorna el archivo
+    Ingresas inicio y fin de el rango que quieres obtener y te
+    retorna el archivo
     """
     headers = {'Content-Disposition': 'attachment; filename="Book.xlsx"'}
     listOfTag(item.ini, item.fin)
