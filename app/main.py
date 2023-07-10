@@ -25,7 +25,9 @@ token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
 app = FastAPI()
 
-origins = ["http://wa.lomascountry.org"]
+origins = ["http://wa.lomascountry.org",
+           "http://192.168.1.198",
+           "192.168.1.198"]
 
 app.add_middleware(
     CORSMiddleware,
