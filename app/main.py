@@ -90,7 +90,8 @@ async def subir_identification(file: UploadFile = File(...)):
                         ".jpg", cv2.imread("app/imgAPI/0.jpg"))
             return op
         print(aux)
-        return Response(content=aux, media_type="application/json")
+        headers = {"Content-Language": "en-US"}
+        return Response(content=aux, media_type="application/json", headers=headers)
 
 
 @app.get("/img/{photo}")
