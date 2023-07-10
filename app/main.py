@@ -83,7 +83,7 @@ async def root():
 #     return response
 
 
-@app.middleware("http")
+# @app.middleware("http")
 @app.post("/upload")
 async def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
@@ -102,7 +102,7 @@ async def subir_identification(file: UploadFile = File(...)):
         # print(aux)
         headers = {"Access-Control-Allow-Origin": "*"}
         response = JSONResponse(content=aux, headers=headers)
-        response.headers["X-Process-Time"] = str(1234)
+        # response.headers["X-Process-Time"] = str(1234)
         print(response)
         return response
 
