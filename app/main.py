@@ -103,7 +103,7 @@ async def subir_identification(file: UploadFile = File(...)):
         headers = {"Access-Control-Allow-Origin": "*"}
         response = JSONResponse(content=aux, headers=headers)
         # response.headers["X-Process-Time"] = str(1234)
-        print(response._headers)
+        # print(response._headers)
         return response
 
 
