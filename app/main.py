@@ -90,9 +90,11 @@ async def subir_identification(file: UploadFile = File(...)):
             cv2.imwrite("app/img/fail/"+str(datetime.now()) +
                         ".jpg", cv2.imread("app/imgAPI/0.jpg"))
             return op
-        print(aux)
+        # print(aux)
         headers = {"Access-Control-Allow-Origin": "*"}
-        return JSONResponse(content=aux, headers=headers)
+        response = JSONResponse(content=aux, headers=headers)
+        print(response)
+        return response
 
 
 @app.get("/img/{photo}")
