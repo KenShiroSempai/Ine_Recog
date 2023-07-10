@@ -17,22 +17,22 @@ import os
 import cv2
 import json
 import _thread
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 
 token = "0f678cb4f8aab5fad68e3a941a004545ea037db0"
 
 app = FastAPI()
 
-# origins = ["*"]
+origins = ["*"]
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=False,
-#     allow_methods=["POST", "GET"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["POST", "GET"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/logcarless")
@@ -74,6 +74,7 @@ async def root():
     return {"Estado": "Funcionando"}
 
 
+@app.middleware("http")
 @app.post("/upload")
 async def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
