@@ -75,6 +75,15 @@ async def root():
 
 
 @app.middleware("http")
+@app.post("/middle")
+async def middle(file: UploadFile = File(...)):
+    response = subir_identification(file)
+    response.headers["X-Process-Time"] = str(1234)
+    print(response)
+    return response
+
+
+@app.middleware("http")
 @app.post("/upload")
 async def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
