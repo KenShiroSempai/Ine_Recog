@@ -236,25 +236,25 @@ def idk(im):
     js, op = ine1(img)
     if op:
         cv2.imwrite("img/"+str(datetime.now()) + "_ine1" +
-                    "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
+                    "_"+js["name"]+".jpg", cv2.imread("imgAPI/1.jpg"))
         return js, op
     print("no ine1")
     js, op = ine0(img)
     if op:
         cv2.imwrite("img/"+str(datetime.now()) + "_ine0" +
-                    "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
+                    "_"+js["name"]+".jpg", cv2.imread("imgAPI/1.jpg"))
         return js, op
     print("no ine0")
     js, op = ife(img)
     if op:
         cv2.imwrite("img/"+str(datetime.now()) + "_ife" +
-                    "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
+                    "_"+js["name"]+".jpg", cv2.imread("imgAPI/1.jpg"))
         return js, op
     print("no ife")
     js, op = lic(img)
     if op:
         cv2.imwrite("img/"+str(datetime.now()) + "_lic" +
-                    "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
+                    "_"+js["name"]+".jpg", cv2.imread("imgAPI/1.jpg"))
         return js, op
     print("no lic")
     return js, False
