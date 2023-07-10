@@ -3,10 +3,10 @@ from recognition.recognition import imageAlignment, extractT
 from datetime import datetime
 
 # templates
-ine0T = "app/templates/ine0.jpeg"
-ine1T = "app/templates/ine1.jpeg"
-ifeT = "app/templates/ife.jpeg"
-licT = "app/templates/lic.jpeg"
+ine0T = "templates/ine0.jpeg"
+ine1T = "templates/ine1.jpeg"
+ifeT = "templates/ife.jpeg"
+licT = "templates/lic.jpeg"
 
 
 def has_numbers(inputString):
@@ -24,7 +24,7 @@ def ife(img):
     pointNam = (0, 182)
     pointNam2 = (365, 289)
     aligned, matchedVis = imageAlignment(image=img, template=template)
-    cv2.imwrite("app/imgAPI/1.jpg", aligned)
+    cv2.imwrite("imgAPI/1.jpg", aligned)
 
     name, image = extractT(
         aligned,
@@ -38,8 +38,8 @@ def ife(img):
         pointEle,
         pointEle2
     )
-    cv2.imwrite("app/imgAPI/2.jpg", finalImage)
-    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
+    cv2.imwrite("imgAPI/2.jpg", finalImage)
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if "NoMBRE" in name:
@@ -76,7 +76,7 @@ def ine0(img):
     pointNam = (300, 160)
     pointNam2 = (665, 289)
     aligned, matchedVis = imageAlignment(image=img, template=template)
-    cv2.imwrite("app/imgAPI/1.jpg", aligned)
+    cv2.imwrite("imgAPI/1.jpg", aligned)
 
     name, image = extractT(
         aligned,
@@ -90,8 +90,8 @@ def ine0(img):
         pointEle,
         pointEle2
     )
-    cv2.imwrite("app/imgAPI/2.jpg", finalImage)
-    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
+    cv2.imwrite("imgAPI/2.jpg", finalImage)
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if (len(name[0]) < 3):
@@ -126,7 +126,7 @@ def ine1(img):
     pointNam = (315, 175)
     pointNam2 = (655, 303)
     aligned, matchedVis = imageAlignment(image=img, template=template)
-    cv2.imwrite("app/imgAPI/1.jpg", aligned)
+    cv2.imwrite("imgAPI/1.jpg", aligned)
 
     name, image = extractT(
         aligned,
@@ -140,8 +140,8 @@ def ine1(img):
         pointEle,
         pointEle2
     )
-    cv2.imwrite("app/imgAPI/2.jpg", finalImage)
-    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
+    cv2.imwrite("imgAPI/2.jpg", finalImage)
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if "NONBRE" in name:
@@ -181,8 +181,8 @@ def lic(img):
     pointNam = (146, 768)
     pointNam2 = (854, 975)
     aligned, matchedVis = imageAlignment(image=img, template=template)
-    cv2.imwrite("app/imgAPI/1.jpg", aligned)
-    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
+    cv2.imwrite("imgAPI/1.jpg", aligned)
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     name, image = extractT(
         aligned,
         pointNam,
@@ -212,8 +212,8 @@ def lic(img):
         pointEle,
         pointEle2
     )
-    cv2.imwrite("app/imgAPI/2.jpg", finalImage)
-    cv2.imwrite('app/imgAPI/3.jpg', matchedVis)
+    cv2.imwrite("imgAPI/2.jpg", finalImage)
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     if "RFC" in elector:
         elector.remove("RFC")
     print(elector)
@@ -235,25 +235,25 @@ def idk(im):
     img = cv2.imread(im)
     js, op = ine1(img)
     if op:
-        cv2.imwrite("app/img/"+str(datetime.now()) + "_ine1" +
+        cv2.imwrite("img/"+str(datetime.now()) + "_ine1" +
                     "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
         return js, op
     print("no ine1")
     js, op = ine0(img)
     if op:
-        cv2.imwrite("app/img/"+str(datetime.now()) + "_ine0" +
+        cv2.imwrite("img/"+str(datetime.now()) + "_ine0" +
                     "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
         return js, op
     print("no ine0")
     js, op = ife(img)
     if op:
-        cv2.imwrite("app/img/"+str(datetime.now()) + "_ife" +
+        cv2.imwrite("img/"+str(datetime.now()) + "_ife" +
                     "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
         return js, op
     print("no ife")
     js, op = lic(img)
     if op:
-        cv2.imwrite("app/img/"+str(datetime.now()) + "_lic" +
+        cv2.imwrite("img/"+str(datetime.now()) + "_lic" +
                     "_"+js["name"]+".jpg", cv2.imread("app/imgAPI/1.jpg"))
         return js, op
     print("no lic")

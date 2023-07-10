@@ -91,12 +91,12 @@ async def subir_identification(file: UploadFile = File(...)):
     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
     los datos de la Identificacion.
     """
-    async with aiofiles.open("app/imgAPI/0.jpg", 'wb') as out_file:
+    async with aiofiles.open("imgAPI/0.jpg", 'wb') as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
-        aux, op = idk("app/imgAPI/0.jpg")
+        aux, op = idk("imgAPI/0.jpg")
         if not op:
-            cv2.imwrite("app/img/fail/"+str(datetime.now()) +
+            cv2.imwrite("img/fail/"+str(datetime.now()) +
                         ".jpg", cv2.imread("app/imgAPI/0.jpg"))
             return op
         # print(aux)
@@ -119,7 +119,7 @@ async def retorna_Img(photo):
     except Exception as ex:
         return {"error": ex.args}
     if ((num < 4) and (num > -1)):
-        return responses.FileResponse(f"app/imgAPI/{photo}.jpg")
+        return responses.FileResponse(f"imgAPI/{photo}.jpg")
     return {"error": "malasolicitud"}
 
 
@@ -132,7 +132,7 @@ async def returnTags(item: tagRange):
     """
     headers = {'Content-Disposition': 'attachment; filename="Book.xlsx"'}
     listOfTag(item.ini, item.fin)
-    return FileResponse("app/Bitacora/tag.txt", headers=headers)
+    return FileResponse("Bitacora/tag.txt", headers=headers)
 
 
 @app.post("/qr/")
@@ -161,7 +161,7 @@ async def borrar_whatsQr():
     generada en caso de que no exista el archivo, retorna un mensaje diciendo
     que no existe.
     """
-    file_to_rem = pathlib.Path("app/qr/QrWhats.png")
+    file_to_rem = pathlib.Path("qr/QrWhats.png")
     if (os.path.isfile(file_to_rem)):
         file_to_rem.unlink()
         return {"msg": "Archivo eliminado"}
@@ -176,7 +176,7 @@ async def returnJS():
     generada en caso de que no exista el archivo, retorna un mensaje diciendo
     que no existe.
     """
-    filename = 'app/Bitacora/data.json'
+    filename = 'Bitacora/data.json'
     if not os.path.exists(filename):
         print("mamo")
         return {}
