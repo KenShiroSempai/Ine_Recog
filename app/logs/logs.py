@@ -1,7 +1,7 @@
 import time
 import os
 from recognition.ine import idk
-from extras.struct import *
+from extras.struct import kibanaLog
 from base64 import b64decode
 import cv2
 from csv import writer
@@ -102,7 +102,8 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     f.write(jss)
     f.close()
 
-def saveCsv(item:kibanaLog):
+
+def saveCsv(item: kibanaLog):
     lista = []
     lista.extend([item.origen, item.conjunto, item.building, item.floor, item.timestamp, item.autorizo, item.name, item.idPath,
                  item.facePath, item.plate, item.make, item.model, item.color, item.guardia, item.tag, item.preauth])
