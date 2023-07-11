@@ -44,7 +44,7 @@ async def logGral(item: logCarless):
 
 @app.post("/ppOut")
 async def ppOut(item: deleteLog):
-    filename = 'app/Bitacora/data.json'
+    filename = 'Bitacora/data.json'
 
     if not os.path.exists(filename):
         return {"msg": "no funciono"}
