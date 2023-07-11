@@ -10,15 +10,15 @@ import json
 
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
     data = {}
-    filename = 'app/Bitacora/data.json'
+    filename = 'Bitacora/data.json'
     lista = []
-    pathDefault = "app/imgAPI/0.jpg"
+    pathDefault = "imgAPI/0.jpg"
     year = time.strftime("%Y")
     mont = time.strftime("%m")
     day = time.strftime("%d")
     timeMin = time.strftime("%H%M%S") + " "+reason
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    newPath = "app/Bitacora/"+conjunto
+    newPath = "Bitacora/"+conjunto
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
 
@@ -31,11 +31,11 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
         aux["nombre"] = "EMPTY"
         aux["paterno"] = "EMPTY"
         name = timestamp + ".jpg"
-        cv2.imwrite("app/img/fail/"+timestamp + ".jpg",
-                    cv2.imread("app/imgAPI/0.jpg"))
+        cv2.imwrite("img/fail/"+timestamp + ".jpg",
+                    cv2.imread("imgAPI/0.jpg"))
     else:
         name = aux["name"]
-    newPath = "app/Bitacora/" + conjunto
+    newPath = "Bitacora/" + conjunto
     if not (os.path.exists(newPath)):
         os.mkdir(newPath)
     newPath = newPath+"/"+building
@@ -72,7 +72,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
         f.write(b64decode(face))
     lista.extend([origen, conjunto, building, floor, str(timestamp), autorizo, aux["nombre"], idPath,
                  facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    with open("app/Bitacora/" + conjunto+"/" + 'log.csv', 'a') as f_object:
+    with open("Bitacora/" + conjunto+"/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
         f_object.close()
@@ -106,7 +106,7 @@ def saveCsv(item:kibanaLog):
     lista = []
     lista.extend([item.origen, item.conjunto, item.building, item.floor, item.timestamp, item.autorizo, item.name, item.idPath,
                  item.facePath, item.plate, item.make, item.model, item.color, item.guardia, item.tag, item.preauth])
-    with open("app/Bitacora/" + item.conjunto+"/" + 'log.csv', 'a') as f_object:
+    with open("Bitacora/" + item.conjunto+"/" + 'log.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(lista)
         f_object.close()
