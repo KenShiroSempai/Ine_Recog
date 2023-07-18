@@ -85,15 +85,15 @@ def root():
 
 # @app.middleware("http")
 @app.post("/upload")
-def subir_identification(file: UploadFile = File(...)):
+async def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
 
     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
     los datos de la Identificacion.
     """
-    with aiofiles.open("imgAPI/0.jpg", 'wb') as out_file:
-        content = file.read()  # async read
-        out_file.write(content)  # async write
+    async with aiofiles.open("imgAPI/0.jpg", 'wb') as out_file:
+        content = await file.read()  # async read
+        await out_file.write(content)  # async write
         aux, op = idk("imgAPI/0.jpg")
         if not op:
             cv2.imwrite("img/fail/"+str(datetime.now()) +
