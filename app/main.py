@@ -125,39 +125,6 @@ def returnTags(item: tagRange):
     return FileResponse("Bitacora/tag.txt", headers=headers)
 
 
-@app.post("/qr/")
-def create_whatsQr(item: Item):
-    """Generador de QR.
-
-    Metodo para uso exclusivo del bot de whatsapp, recibe un string y genera
-    un codigo qr con dicho string lo guarda en la carpeta espejeada en disk2
-    para que pueda ser tomado por otro docker
-    """
-    if item.url:
-        R = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
-        R.add_data(item.url)
-        R.make
-        Q = R.make_image(fill_color='Black', back_color='White').convert('RGB')
-        Q = Q.resize((1000, 1000), Image.ANTIALIAS)
-        Q.save(r'qr/QrWhats.png')
-    return {"msg": "too cool "}
-
-
-@app.get("/delete/")
-def borrar_whatsQr():
-    """Borrar Qr generado.
-
-    Metodo para uso exclusivo de el bot de whatsapp, borra la imagen que este
-    generada en caso de que no exista el archivo, retorna un mensaje diciendo
-    que no existe.
-    """
-    file_to_rem = pathlib.Path("qr/QrWhats.png")
-    if (os.path.isfile(file_to_rem)):
-        file_to_rem.unlink()
-        return {"msg": "Archivo eliminado"}
-    return {"msg": "No hay archivo para eliminar"}
-
-
 @app.get("/adentro/")
 def returnJS():
     """Borrar Qr generado.
