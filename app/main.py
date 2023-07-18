@@ -74,16 +74,6 @@ def root():
     return {"Estado": "Funcionando"}
 
 
-# @app.middleware("http")
-# @app.post("/middle")
-# async def middle(file: UploadFile = File(...)):
-#     response = subir_identification(file)
-#     response.headers["X-Process-Time"] = str(1234)
-#     print(response)
-#     return response
-
-
-# @app.middleware("http")
 @app.post("/upload")
 async def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
@@ -97,7 +87,7 @@ async def subir_identification(file: UploadFile = File(...)):
         aux, op = idk("imgAPI/0.jpg")
         if not op:
             cv2.imwrite("img/fail/"+str(datetime.now()) +
-                        ".jpg", cv2.imread("app/imgAPI/0.jpg"))
+                        ".jpg", cv2.imread("imgAPI/0.jpg"))
             return op
         # print(aux)
         headers = {"Access-Control-Allow-Origin": "*"}
@@ -149,7 +139,7 @@ def create_whatsQr(item: Item):
         R.make
         Q = R.make_image(fill_color='Black', back_color='White').convert('RGB')
         Q = Q.resize((1000, 1000), Image.ANTIALIAS)
-        Q.save(r'app/qr/QrWhats.png')
+        Q.save(r'qr/QrWhats.png')
     return {"msg": "too cool "}
 
 
