@@ -7,11 +7,8 @@ from fastapi.responses import FileResponse, JSONResponse
 import aiofiles
 from recognition.ine import idk
 from extras.tags import listOfTag
-from extras.struct import logCarless, deleteLog, Item, tagRange, kibanaLog
+from extras.struct import logCarless, deleteLog, tagRange, kibanaLog
 from logs.logs import logCarLess, saveCsv
-import qrcode
-from PIL import Image
-import pathlib
 from datetime import datetime
 import os
 import cv2
