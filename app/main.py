@@ -185,6 +185,6 @@ def returnJS():
 
     return data
 
-@app.post()
+@app.post("/polarea")
 def logCars():
     pass
