@@ -140,4 +140,4 @@ def returnJS():
 
 @app.post("/polarea")
 def logCars(data: carList):
-    pass
+    print(data)
