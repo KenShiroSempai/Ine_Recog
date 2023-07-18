@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse
 import aiofiles
 from recognition.ine import idk
 from extras.tags import listOfTag
-from extras.struct import logCarless, deleteLog, tagRange, kibanaLog
+from extras.struct import logCarless, deleteLog, tagRange, kibanaLog, carList
 from logs.logs import logCarLess, saveCsv
 from datetime import datetime
 import os
@@ -137,6 +137,7 @@ def returnJS():
 
     return data
 
+
 @app.post("/polarea")
-def logCars():
+def logCars(data: carList):
     pass

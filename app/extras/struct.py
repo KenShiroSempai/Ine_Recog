@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from dataclasses import dataclass
+from typing import List
 
 
 class logEnramada(BaseModel):
@@ -54,16 +55,6 @@ class logCarless(BaseModel):
     reason: str
 
 
-class Item(BaseModel):
-    """Objeto a recivir en el apartado de QR.
-
-    Se hizo una clase en para que en un futuro, si se quieren aumentar los
-    parametros sea mas sencillo.
-    """
-
-    url: str    # String del cual se va a generar el QR
-
-
 class tagRange(BaseModel):
     """Rango de Tags
 
@@ -93,3 +84,14 @@ class kibanaLog():
     guardia: str
     tag: str
     preauth: str
+
+
+class oneCar(BaseModel):
+    plate: str
+    place: str
+    time: str
+    img: str
+
+
+class carList(BaseModel):
+    data: List[oneCar]
