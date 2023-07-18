@@ -36,14 +36,14 @@ app.add_middleware(
 
 
 @app.post("/logcarless")
-async def logGral(item: logCarless):
+def logGral(item: logCarless):
     _thread.start_new_thread(logCarLess, (item.building, item.floor, item.idCArd,
                              item.face, item.conjunto, item.autorizo, item.guard, item.origen, item.reason))
     return {"msg": "ok"}
 
 
 @app.post("/ppOut")
-async def ppOut(item: deleteLog):
+def ppOut(item: deleteLog):
     filename = 'Bitacora/data.json'
 
     if not os.path.exists(filename):
@@ -66,7 +66,7 @@ async def ppOut(item: deleteLog):
 
 
 @app.get("/")
-async def root():
+def root():
     """Ruta defaul.
 
     se usa esta ruta para ver si la API esta en linea antes de hacer pruebas
@@ -85,15 +85,15 @@ async def root():
 
 # @app.middleware("http")
 @app.post("/upload")
-async def subir_identification(file: UploadFile = File(...)):
+def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
 
     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
     los datos de la Identificacion.
     """
-    async with aiofiles.open("imgAPI/0.jpg", 'wb') as out_file:
-        content = await file.read()  # async read
-        await out_file.write(content)  # async write
+    with aiofiles.open("imgAPI/0.jpg", 'wb') as out_file:
+        content = file.read()  # async read
+        out_file.write(content)  # async write
         aux, op = idk("imgAPI/0.jpg")
         if not op:
             cv2.imwrite("img/fail/"+str(datetime.now()) +
@@ -108,7 +108,7 @@ async def subir_identification(file: UploadFile = File(...)):
 
 
 @app.get("/img/{photo}")
-async def retorna_Img(photo):
+def retorna_Img(photo):
     """Monitorear el procesamiento.
 
     Metodo exclusivo para regresar las imagenes
@@ -124,7 +124,7 @@ async def retorna_Img(photo):
 
 
 @app.get("/tags", response_class=FileResponse)
-async def returnTags(item: tagRange):
+def returnTags(item: tagRange):
     """Loop Tags
 
     Ingresas inicio y fin de el rango que quieres obtener y te
@@ -136,7 +136,7 @@ async def returnTags(item: tagRange):
 
 
 @app.post("/qr/")
-async def create_whatsQr(item: Item):
+def create_whatsQr(item: Item):
     """Generador de QR.
 
     Metodo para uso exclusivo del bot de whatsapp, recibe un string y genera
@@ -154,7 +154,7 @@ async def create_whatsQr(item: Item):
 
 
 @app.get("/delete/")
-async def borrar_whatsQr():
+def borrar_whatsQr():
     """Borrar Qr generado.
 
     Metodo para uso exclusivo de el bot de whatsapp, borra la imagen que este
@@ -169,7 +169,7 @@ async def borrar_whatsQr():
 
 
 @app.get("/adentro/")
-async def returnJS():
+def returnJS():
     """Borrar Qr generado.
 
     Metodo para uso exclusivo de el bot de whatsapp, borra la imagen que este
@@ -184,3 +184,7 @@ async def returnJS():
         data = json.load(file)
 
     return data
+
+@app.post()
+def logCars():
+    pass
