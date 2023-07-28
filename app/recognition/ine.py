@@ -25,7 +25,7 @@ def ife(img):
     pointNam2 = (365, 289)
     aligned, matchedVis = imageAlignment(image=img, template=template)
     cv2.imwrite("imgAPI/1.jpg", aligned)
-
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     name, image = extractT(
         aligned,
         pointNam,
@@ -39,7 +39,6 @@ def ife(img):
         pointEle2
     )
     cv2.imwrite("imgAPI/2.jpg", finalImage)
-    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if "NoMBRE" in name:
@@ -77,7 +76,7 @@ def ine0(img):
     pointNam2 = (665, 289)
     aligned, matchedVis = imageAlignment(image=img, template=template)
     cv2.imwrite("imgAPI/1.jpg", aligned)
-
+    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     name, image = extractT(
         aligned,
         pointNam,
@@ -91,7 +90,6 @@ def ine0(img):
         pointEle2
     )
     cv2.imwrite("imgAPI/2.jpg", finalImage)
-    cv2.imwrite('imgAPI/3.jpg', matchedVis)
     if "NOMBRE" in name:
         name.remove("NOMBRE")
     if (len(name[0]) < 3):
