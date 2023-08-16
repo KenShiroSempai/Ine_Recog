@@ -7,11 +7,10 @@ services:
       - "4999:8000"
     volumes:
         - ./app/:/app/
-        - /root/node/whabotapi/client/public:/app/qr
-        - /mnt/disk2/fotosID:/app/img
-        - /mnt/disk2/samba/files/tagsRefrendo:/app/tag
-        - /mnt/disk2/bitacoraIO:/app/Enramada
-        - /mnt/disk2/bitacoraIO:/app/Bitacora
+        - /mnt/4tb/fotosID:/app/img
+        - /mnt/4tb/samba/files/tagsRefrendo:/app/tag
+        - /mnt/4tb/bitacoraIO:/app/Enramada
+        - /mnt/4tb/bitacoraIO:/app/Bitacora
     restart: always
     environment:
       - TZ=America/Mexico_City
