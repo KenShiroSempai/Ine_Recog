@@ -2,6 +2,7 @@ import cv2
 from recognition.recognition import imageAlignment, extractT
 from datetime import datetime
 
+
 # templates
 ine0T = "templates/ine0.1.jpeg"
 ine1T = "templates/ine1.jpeg"

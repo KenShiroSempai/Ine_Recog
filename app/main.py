@@ -3,31 +3,17 @@
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
 from fastapi import FastAPI, File, UploadFile, responses
-from fastapi.responses import FileResponse, JSONResponse
-import aiofiles
-from recognition.ine import idk
+from fastapi.responses import FileResponse
+from recognition.idRecognition import idRecognition
 from extras.tags import listOfTag
 from extras.struct import logCarless, deleteLog, tagRange, kibanaLog, carList
 from logs.logs import logCarLess, saveCsv
-from datetime import datetime
 import os
-import cv2
 import json
 import _thread
-from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
-
-origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=False,
-    allow_methods=["POST", "GET"],
-    allow_headers=["*"],
-)
 
 
 @app.post("/logcarless")
@@ -70,26 +56,20 @@ def root():
 
 
 @app.post("/upload")
-async def subir_identification(file: UploadFile = File(...)):
+def subir_identification(file: UploadFile = File(...)):
     """Subir identificaciones.
 
     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
     los datos de la Identificacion.
     """
-    async with aiofiles.open("imgAPI/0.jpg", 'wb') as out_file:
-        content = await file.read()  # async read
-        await out_file.write(content)  # async write
-        aux, op = idk("imgAPI/0.jpg")
-        if not op:
-            cv2.imwrite("img/fail/"+str(datetime.now()) +
-                        ".jpg", cv2.imread("imgAPI/0.jpg"))
-            return op
-        # print(aux)
-        headers = {"Access-Control-Allow-Origin": "*"}
-        response = JSONResponse(content=aux, headers=headers)
-        # response.headers["X-Process-Time"] = str(1234)
-        # print(response._headers)
-        return response
+    return idRecognition(file)
+    # content = file.file.read()
+    # open("imgAPI/0.jpg", 'wb').write(content)
+    # aux, op = idk("imgAPI/0.jpg")
+    # if not op:
+    #     cv2.imwrite("img/fail/"+str(datetime.now()) +
+    #                 ".jpg", cv2.imread("imgAPI/0.jpg"))
+    #     return op
 
 
 @app.get("/img/{photo}")
