@@ -58,6 +58,8 @@ def recognitionMiddle(img):
         cve = filterCve(cve)
         if (len(name) > 0 and len(cve) > 0):
             filename, response = makeResponse(name, cve)
+    if not response:
+        response = False
     return filename, response
 
 
