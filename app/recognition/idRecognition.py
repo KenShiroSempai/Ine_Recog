@@ -88,7 +88,7 @@ def makeResponse(name, cve):
     }
     content = jsonable_encoder(res)
     response = JSONResponse(
-        status_code=status.HTTP_202_ACCEPTED, content=content)
+        status_code=status.HTTP_200_OK, content=content)
     return filename, response
 
 
