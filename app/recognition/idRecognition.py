@@ -32,6 +32,7 @@ def idRecognition(file):
     if not filename:
         filename = "error.jpg"
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
+    open('imgAPI/0.jpg', 'wb').write(content)
     return response
 
 
@@ -44,8 +45,6 @@ def recognitionMiddle(img, keep):
         points_list = TEMPLATES[template]
         img_template = cv2.imread(TEMPLATE + template)
         aligned, matchedVis = imageAlignment(image=img, template=img_template, maxFeatures=keep)
-        cv2.imwrite("imgAPI/1.jpg", aligned)
-        cv2.imwrite('imgAPI/3.jpg', matchedVis)
         name, image = extractT(
             aligned,
             points_list[2],
@@ -60,11 +59,13 @@ def recognitionMiddle(img, keep):
             points_list[0],
             points_list[1]
         )
-        cv2.imwrite(createDatePath('imgAPI/')+'.jpg', finalImage)
         if (len(cve) == 0):
             continue
         cve = filterCve(cve)
         if (len(name) > 0 and len(cve) > 0):
+            cv2.imwrite("imgAPI/1.jpg", aligned)
+            cv2.imwrite('imgAPI/3.jpg', matchedVis)
+            cv2.imwrite('imgAPI/2.jpg', finalImage)
             filename, response = makeResponse(name, cve)
     if not response:
         response = False
