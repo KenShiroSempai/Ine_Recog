@@ -44,7 +44,8 @@ def recognitionMiddle(img, keep):
             continue
         points_list = TEMPLATES[template]
         img_template = cv2.imread(TEMPLATE + template)
-        aligned, matchedVis = imageAlignment(image=img, template=img_template, maxFeatures=keep)
+        aligned, matchedVis = imageAlignment(
+            image=img, template=img_template, maxFeatures=keep)
         name, image = extractT(
             aligned,
             points_list[2],
@@ -61,7 +62,7 @@ def recognitionMiddle(img, keep):
         )
         if (len(cve) == 0):
             continue
-        cve = filterCve(cve)
+        cve = filterCve(cve, name[0])
         if (len(name) > 0 and len(cve) > 0):
             cv2.imwrite("imgAPI/1.jpg", aligned)
             cv2.imwrite('imgAPI/3.jpg', matchedVis)
@@ -82,13 +83,18 @@ def filterName(name):
     return newName
 
 
-def filterCve(cve):
-    list1 = [ele for ele in cve if len(ele) > 1]
+def filterCve(cve, pat):
+    print(cve)
+    list1 = [x for x in cve if len(x) > 7]
+    # list1 = [ele for ele in cve if len(ele) > 4]
     list1 = [ele for ele in list1 if ele not in CVEBLACKLIST]
     newCve = ""
-    for aux in cve:
+    for aux in list1:
         if aux != " ":
             newCve += aux
+    if (len(newCve) < 16):
+        return ""
+    print(newCve)
     return newCve
 
 
