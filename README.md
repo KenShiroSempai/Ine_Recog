@@ -16,7 +16,7 @@ deactivate
 ```
 iniciar API
 ```
-uvicorn app.main:app --host 0.0.0.0 --port 4999
+uvicorn main:app --host 0.0.0.0 --port 4999
 ```
 ## Clonacion de repositorios
 ```
