@@ -84,7 +84,7 @@ def filterCve(cve):
 
 
 def makeResponse(name, cve):
-    filename = str(cve) + '.jpg',
+    filename = 'a.jpg',
     res = {
         'paterno': name[0],
         'materno': name[1],
