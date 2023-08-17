@@ -41,3 +41,6 @@ def createDatePath(basePath):
     newPath = basePath + year + '/' + month + '/' + day + '/'
     createPath(newPath)
     return newPath + time[:9] + '_'
+
+
+createPath(LOGPATH)

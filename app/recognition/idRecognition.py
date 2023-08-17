@@ -3,33 +3,39 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import status
 from scripts.paths import createDatePath, logRecognition
-from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST
+from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST, FILEPATH, KEEPPERCENTS
 from recognition.recognition import imageAlignment, extractT
 import cv2
 import re
 
 
 def idRecognition(file):
+    filename = None
+    content = file.file.read()
     if (file.content_type[:5] != 'image'):
         res = {
             'message': 'content_type should be image',
             'content_type': file.content_type,
             'file Name': file.filename
         }
+        open(createDatePath(FILEPATH) + file.filename, 'wb').write(content)
         content = jsonable_encoder(res)
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content)
-    content = file.file.read()
     nparr = np.frombuffer(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    filename, response = recognitionMiddle(img)
+    for keep in KEEPPERCENTS:
+        if filename:
+            continue
+        print(keep)
+        filename, response = recognitionMiddle(img, keep)
+
     if not filename:
         filename = "error.jpg"
-    filename = 'a.jpg'
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
     return response
 
 
-def recognitionMiddle(img):
+def recognitionMiddle(img, keep):
     response = None
     filename = None
     for template in TEMPLATES:
@@ -37,7 +43,7 @@ def recognitionMiddle(img):
             continue
         points_list = TEMPLATES[template]
         img_template = cv2.imread(TEMPLATE + template)
-        aligned, matchedVis = imageAlignment(image=img, template=img_template)
+        aligned, matchedVis = imageAlignment(image=img, template=img_template, maxFeatures=keep)
         cv2.imwrite("imgAPI/1.jpg", aligned)
         cv2.imwrite('imgAPI/3.jpg', matchedVis)
         name, image = extractT(
@@ -45,7 +51,8 @@ def recognitionMiddle(img):
             points_list[2],
             points_list[3]
         )
-        if (len(name) == 0):
+        print(name)
+        if (len(name) < 3):
             continue
         name = filterName(name)
         cve, finalImage = extractT(
@@ -85,7 +92,7 @@ def filterCve(cve):
 
 
 def makeResponse(name, cve):
-    filename = 'a.jpg',
+    filename = cve + '.jpg'
     res = {
         'paterno': name[0],
         'materno': name[1],

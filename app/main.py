@@ -63,13 +63,6 @@ def subir_identification(file: UploadFile = File(...)):
     los datos de la Identificacion.
     """
     return idRecognition(file)
-    # content = file.file.read()
-    # open("imgAPI/0.jpg", 'wb').write(content)
-    # aux, op = idk("imgAPI/0.jpg")
-    # if not op:
-    #     cv2.imwrite("img/fail/"+str(datetime.now()) +
-    #                 ".jpg", cv2.imread("imgAPI/0.jpg"))
-    #     return op
 
 
 @app.get("/img/{photo}")
