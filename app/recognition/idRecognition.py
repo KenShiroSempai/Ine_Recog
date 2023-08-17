@@ -22,6 +22,8 @@ def idRecognition(file):
     nparr = np.frombuffer(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     filename, response = recognitionMiddle(img)
+    if not filename:
+        filename = "error.jpg"
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
     return response
 
