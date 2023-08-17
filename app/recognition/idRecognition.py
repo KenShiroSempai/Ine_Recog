@@ -46,38 +46,41 @@ def recognitionMiddle(img, keep):
         img_template = cv2.imread(TEMPLATE + template)
         aligned, matchedVis = imageAlignment(
             image=img, template=img_template, maxFeatures=keep)
+        cv2.imwrite("imgAPI/1.jpg", aligned)
+        cv2.imwrite('imgAPI/3.jpg', matchedVis)
         name, image = extractT(
             aligned,
             points_list[2],
             points_list[3]
         )
-        print(name)
+        name = filterName(name, template)
         if (len(name) < 3):
             continue
-        name = filterName(name)
         cve, finalImage = extractT(
             image,
             points_list[0],
             points_list[1]
         )
+        cv2.imwrite('imgAPI/2.jpg', finalImage)
         if (len(cve) == 0):
             continue
         cve = filterCve(cve, name[0])
         if (len(name) > 0 and len(cve) > 0):
-            cv2.imwrite("imgAPI/1.jpg", aligned)
-            cv2.imwrite('imgAPI/3.jpg', matchedVis)
-            cv2.imwrite('imgAPI/2.jpg', finalImage)
             filename, response = makeResponse(name, cve)
     if not response:
         response = False
     return filename, response
 
 
-def filterName(name):
+def filterName(name, doc):
+    print(name)
     newName = []
     for tmp in name:
-        newName.append(preprocess_ocr_output(tmp))
+        for tmp2 in tmp.split():
+            newName.append(preprocess_ocr_output(tmp2))
+            print(tmp2)
     newName = [ele for ele in newName if ele not in NAMEBLACKLIST]
+    print(newName)
     # regex = re.compile(r'N+[o,O,0]+[A-Z]+[a-z]+E+')
     # filtered = [i for i in newName if not regex.match(i)]
     return newName
@@ -100,10 +103,13 @@ def filterCve(cve, pat):
 
 def makeResponse(name, cve):
     filename = cve + '.jpg'
+    names = ""
+    for aux in name[2:len(name)]:
+        names += aux + " "
     res = {
         'paterno': name[0],
         'materno': name[1],
-        'nombre': name[2],
+        'nombre': names,
         'filename': filename,
         'clave': cve
     }
