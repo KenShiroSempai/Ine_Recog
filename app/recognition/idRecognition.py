@@ -84,7 +84,7 @@ def filterName(name, doc):
         for tmp2 in tmp.split():
             newName.append(preprocess_ocr_output(tmp2).upper())
     newName = [ele for ele in newName if ele not in NAMEBLACKLIST]
-    regex = re.compile(r'^NO[A-Z]*E$')
+    regex = re.compile(r'^NO[A-Z]+E$')
     filtered = [i for i in newName if not regex.match(i)]
     return filtered
 
