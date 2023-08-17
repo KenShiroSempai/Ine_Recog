@@ -15,4 +15,4 @@ TEMPLATES = {'template_0.jpeg': [(494, 413), (784, 462), (300, 160), (665, 294)]
              'lic.jpeg': [(128, 1354), (589, 1545), (146, 768), (854, 975)]
              }
 NAMEBLACKLIST = ['NOMBRE', 'NONBRE', 'NCMPRE']
-CVEBLACKLIST = ['ELECTOR']
+CVEBLACKLIST = ['ELECTOR', 'RFC']

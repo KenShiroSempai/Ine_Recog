@@ -2,7 +2,7 @@ import numpy as np
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import status
-from scripts.paths import createDatePath
+from scripts.paths import createDatePath, logRecognition
 from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST
 from recognition.recognition import imageAlignment, extractT
 import cv2
@@ -74,25 +74,28 @@ def filterName(name):
 
 
 def filterCve(cve):
-    list1 = [ele for ele in cve if len(ele) > 2]
+    list1 = [ele for ele in cve if len(ele) > 1]
     list1 = [ele for ele in list1 if ele not in CVEBLACKLIST]
-    print(list1)
-    return list1
+    newCve = ""
+    for aux in cve:
+        if aux != " ":
+            newCve += aux
+    return newCve
 
 
 def makeResponse(name, cve):
-    filename = 'a.jpg'
+    filename = cve + '.jpg',
     res = {
         'paterno': name[0],
         'materno': name[1],
         'nombre': name[2],
-        'message': 'datos Extraidos correctamente',
-        'filename': name,
-        'clave': cve[0]
+        'filename': filename,
+        'clave': cve
     }
     content = jsonable_encoder(res)
     response = JSONResponse(
         status_code=status.HTTP_200_OK, content=content)
+    logRecognition("document", name[0], name[1], name[2], cve, filename)
     return filename, response
 
 
