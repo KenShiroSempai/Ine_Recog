@@ -70,7 +70,8 @@ def filterName(name):
 
 
 def filterCve(cve):
-    list1 = [ele for ele in cve if ele not in CVEBLACKLIST]
+    list1 = [ele for ele in cve if len(ele) > 2]
+    list1 = [ele for ele in list1 if ele not in CVEBLACKLIST]
     print(list1)
     return list1
 
