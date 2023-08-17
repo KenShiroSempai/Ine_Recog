@@ -84,7 +84,7 @@ def makeResponse(name, cve):
         'nombre': name[2],
         'message': 'datos Extraidos correctamente',
         'filename': name,
-        'clave': cve
+        'clave': cve[0]
     }
     content = jsonable_encoder(res)
     response = JSONResponse(
