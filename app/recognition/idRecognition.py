@@ -24,6 +24,7 @@ def idRecognition(file):
     filename, response = recognitionMiddle(img)
     if not filename:
         filename = "error.jpg"
+    filename = 'a.jpg'
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
     return response
 
