@@ -90,7 +90,6 @@ def filterName(name, doc):
 
 
 def filterCve(cve, pat):
-    print(cve)
     list1 = [x for x in cve if len(x) > 7]
     # list1 = [ele for ele in cve if len(ele) > 4]
     list1 = [ele for ele in list1 if ele not in CVEBLACKLIST]
@@ -107,7 +106,7 @@ def makeResponse(name, cve, doc):
     filename = cve + '.jpg'
     names = ""
     for aux in name[2:len(name)]:
-        names += aux + " "
+        names += (aux + " ")
     res = {
         'paterno': name[0],
         'materno': name[1],
@@ -116,10 +115,11 @@ def makeResponse(name, cve, doc):
         'clave': cve,
         'documento': doc
     }
+    print(res)
     content = jsonable_encoder(res)
     response = JSONResponse(
         status_code=status.HTTP_200_OK, content=content)
-    logRecognition(doc, name[0], name[1], name[2], cve, filename)
+    logRecognition(doc, name[0], name[1], names, cve, filename)
     return filename, response
 
 
