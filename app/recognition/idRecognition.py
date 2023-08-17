@@ -66,21 +66,24 @@ def recognitionMiddle(img, keep):
             continue
         cve = filterCve(cve, name[0])
         if (len(name) > 0 and len(cve) > 0):
-            filename, response = makeResponse(name, cve)
+            filename, response = makeResponse(name, cve, template)
     if not response:
         response = False
     return filename, response
 
 
 def filterName(name, doc):
-    print(name)
+    if doc == 'lic.jpeg':
+        nameTmp = []
+        lenName = len(name) - 1
+        for i in range(lenName):
+            nameTmp.append(name[lenName-i])
+        name = nameTmp
     newName = []
     for tmp in name:
         for tmp2 in tmp.split():
             newName.append(preprocess_ocr_output(tmp2))
-            print(tmp2)
     newName = [ele for ele in newName if ele not in NAMEBLACKLIST]
-    print(newName)
     # regex = re.compile(r'N+[o,O,0]+[A-Z]+[a-z]+E+')
     # filtered = [i for i in newName if not regex.match(i)]
     return newName
@@ -95,13 +98,12 @@ def filterCve(cve, pat):
     for aux in list1:
         if aux != " ":
             newCve += aux
-    if (len(newCve) < 16):
+    if (len(newCve) < 15):
         return ""
-    print(newCve)
     return newCve
 
 
-def makeResponse(name, cve):
+def makeResponse(name, cve, doc):
     filename = cve + '.jpg'
     names = ""
     for aux in name[2:len(name)]:
@@ -111,12 +113,13 @@ def makeResponse(name, cve):
         'materno': name[1],
         'nombre': names,
         'filename': filename,
-        'clave': cve
+        'clave': cve,
+        'documento': doc
     }
     content = jsonable_encoder(res)
     response = JSONResponse(
         status_code=status.HTTP_200_OK, content=content)
-    logRecognition("document", name[0], name[1], name[2], cve, filename)
+    logRecognition(doc, name[0], name[1], name[2], cve, filename)
     return filename, response
 
 
