@@ -90,6 +90,7 @@ def filterName(name, doc):
 
 
 def filterCve(cve, pat):
+    print(cve)
     list1 = [x for x in cve if len(x) > 7]
     # list1 = [ele for ele in cve if len(ele) > 4]
     list1 = [ele for ele in list1 if ele not in CVEBLACKLIST]

@@ -18,5 +18,5 @@ TEMPLATES = {'template_0.jpeg': [(499, 413), (784, 462), (300, 160), (665, 294)]
              'lic.jpeg': [(128, 1254), (655, 1525), (146, 757), (854, 945)]
              }
 NAMEBLACKLIST = ['NOMBRE', 'NONBRE', 'NCMPRE']
-CVEBLACKLIST = ['ELECTOR', 'RFC', 'CURP']
+CVEBLACKLIST = ['ELECTOR', 'RFC', 'CURP', 'CLAVE', 'CLAVE DE ELECTOR']
 KEEPPERCENTS = [2000, 2250, 2500]
