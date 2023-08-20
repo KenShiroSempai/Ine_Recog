@@ -73,7 +73,6 @@ def recognitionMiddle(img, keep):
 
 
 def filterName(name, doc):
-    print(name)
     if doc == 'lic.jpeg':
         nameTmp = []
         lenName = len(name) - 1
@@ -87,7 +86,6 @@ def filterName(name, doc):
     newName = [ele for ele in newName if ele not in NAMEBLACKLIST]
     regex = re.compile(r'^NO+[A-Z]+RE$')
     filtered = [i for i in newName if ((not regex.match(i)))]
-    print(filtered)
     return filtered
 
 
