@@ -12,15 +12,15 @@ import re
 def idRecognition(file):
     filename = None
     content = file.file.read()
-    if (file.content_type[:5] != 'image'):
-        res = {
-            'message': 'content_type should be image',
-            'content_type': file.content_type,
-            'file Name': file.filename
-        }
-        open(createDatePath(FILEPATH) + file.filename, 'wb').write(content)
-        content = jsonable_encoder(res)
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content)
+    # if (file.content_type[:5] != 'image'):
+    #     res = {
+    #         'message': 'content_type should be image',
+    #         'content_type': file.content_type,
+    #         'file Name': file.filename
+    #     }
+    #     open(createDatePath(FILEPATH) + file.filename, 'wb').write(content)
+    #     content = jsonable_encoder(res)
+    #     return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content)
     nparr = np.frombuffer(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     for keep in KEEPPERCENTS:
