@@ -73,8 +73,9 @@ def extractT(aligned, point1, point2):
         point1[0]: point1[0] + width
     ]
     rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
-    # cv2.imwrite('Roi.jpg', rgb)
-    text = reader.readtext(rgb, detail=0)
-
     cv2.rectangle(aligned, point1, point2, RED)
+    cv2.imwrite('Roi.jpg', rgb)
+    # text = reader.readtext(rgb, detail=0)
+    text = []
+    
     return text, aligned
