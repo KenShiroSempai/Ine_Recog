@@ -85,7 +85,6 @@ def removeLabel(ocr_result):
     scale = (7/9)
     text = []
     for result in ocr_result:
-        print(result[1])
         height = np.sum(np.subtract(result[0][2], result[0][1]))
         if height > bigger:
             if height*scale > bigger:
@@ -93,6 +92,4 @@ def removeLabel(ocr_result):
             bigger = height
         if height > bigger*scale:
             text.append(result[1])
-
-    print(text)
     return text
