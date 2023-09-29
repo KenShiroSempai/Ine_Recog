@@ -3,7 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import status
 from scripts.paths import createDatePath, logRecognition
-from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST, FILEPATH, KEEPPERCENTS
+from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST, KEEPPERCENTS
 from recognition.recognition import imageAlignment, extractT
 import cv2
 import re
@@ -83,14 +83,15 @@ def filterName(name, doc):
     for tmp in name:
         for tmp2 in tmp.split():
             newName.append(preprocess_ocr_output(tmp2).upper())
-    newName = [ele for ele in newName if ele not in NAMEBLACKLIST]
+    # tmpName = [ele for ele in newName if ele not in NAMEBLACKLIST]
+    # tmpName = list((set(newName))-(set(NAMEBLACKLIST)))
+    tmpName = [x for x in newName if x not in NAMEBLACKLIST]
     regex = re.compile(r'^NO+[A-Z]+RE$')
-    filtered = [i for i in newName if ((not regex.match(i)))]
+    filtered = [i for i in tmpName if ((not regex.match(i)))]
     return filtered
 
 
 def filterCve(cve, pat):
-    print(cve)
     list1 = [x for x in cve if len(x) > 7]
     # list1 = [ele for ele in cve if len(ele) > 4]
     list1 = [ele for ele in list1 if ele not in CVEBLACKLIST]

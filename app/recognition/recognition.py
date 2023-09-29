@@ -73,9 +73,26 @@ def extractT(aligned, point1, point2):
         point1[0]: point1[0] + width
     ]
     rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
-    cv2.rectangle(aligned, point1, point2, RED)
+    # cv2.rectangle(aligned, point1, point2, RED)
     cv2.imwrite('Roi.jpg', rgb)
-    text = reader.readtext(rgb, detail=0)
-    # text = []
-    
+    ocr_result = reader.readtext(rgb)
+    text = removeLabel(ocr_result)
     return text, aligned
+
+
+def removeLabel(ocr_result):
+    bigger = 0
+    scale = (7/9)
+    text = []
+    for result in ocr_result:
+        print(result[1])
+        height = np.sum(np.subtract(result[0][2], result[0][1]))
+        if height > bigger:
+            if height*scale > bigger:
+                text.clear()
+            bigger = height
+        if height > bigger*scale:
+            text.append(result[1])
+
+    print(text)
+    return text
