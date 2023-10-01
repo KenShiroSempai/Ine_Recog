@@ -82,7 +82,7 @@ def extractT(aligned, point1, point2):
 
 def removeLabel(ocr_result, roi):
     bigger = 0
-    scale = (6/9)
+    scale = (11/13)
     text = []
     for result in ocr_result:
         height = np.sum(np.subtract(result[0][2], result[0][1]))
