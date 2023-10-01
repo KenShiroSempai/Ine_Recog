@@ -21,6 +21,7 @@ def connect():
 def saveFace(idPersona):
     """save faces in postgres"""
     date = None
+    cve = None
     conn = None
     try:
         # connect to the PostgreSQL server
@@ -31,7 +32,9 @@ def saveFace(idPersona):
         cur.execute(
             """SELECT * FROM identificacion WHERE persona=%s""", (idPersona,))
         rows = cur.fetchall()
+        print(rows)
         date = rows[0][6]
+        cve = rows[0][1]
         # close communication with the PostgreSQL database server
         cur.close()
         # commit the changes
@@ -41,4 +44,4 @@ def saveFace(idPersona):
     finally:
         if conn is not None:
             conn.close()
-        return date
+        return date, cve
