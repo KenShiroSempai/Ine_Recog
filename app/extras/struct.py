@@ -95,3 +95,7 @@ class oneCar(BaseModel):
 
 class carList(BaseModel):
     data: List[oneCar]
+
+
+class persona(BaseModel):
+    persona: str

@@ -1,7 +1,8 @@
 import os
-from extras.globalData import LOGPATH
+from extras.globalData import LOGPATH, IMGPATH, DEFAULID
 from csv import writer
 from datetime import datetime
+import fnmatch
 
 
 def createPath(newPath):
@@ -41,6 +42,31 @@ def createDatePath(basePath):
     newPath = basePath + year + '/' + month + '/' + day + '/'
     createPath(newPath)
     return newPath + time[:9] + '_'
+
+
+def createIDPath(cve, date):
+    if date is not None:
+        year = str(date.year)
+        month = str(date.month)
+        day = str(date.day)
+        newPath = IMGPATH + year + '/' + month + '/' + day + '/'
+        patern = '*' + cve + '.jpg'
+        idpaht = find(patern, newPath)
+        if len(idpaht) > 0:
+            return idpaht[0]
+        idpaht = find(patern, IMGPATH)
+        if len(idpaht) > 0:
+            return idpaht[0]
+    return DEFAULID
+
+
+def find(pattern, path):
+    result = []
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if fnmatch.fnmatch(name, pattern):
+                result.append(os.path.join(root, name))
+    return result
 
 
 createPath(LOGPATH)

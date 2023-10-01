@@ -6,6 +6,8 @@ from base64 import b64decode
 import cv2
 from csv import writer
 import json
+from datetime import datetime
+from extras.globalData import LOGPATH
 
 
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
@@ -112,3 +114,14 @@ def saveCsv(item: kibanaLog):
         writer_object.writerow(lista)
         f_object.close()
     print("webos")
+
+
+def logExeption(e, fun):
+    print("oda")
+    lista = []
+    time = datetime.now()
+    lista.extend([time, e, fun])
+    with open(LOGPATH + 'a.csv', 'a') as f_object:
+        writer_object = writer(f_object)
+        writer_object.writerow(lista)
+        f_object.close()

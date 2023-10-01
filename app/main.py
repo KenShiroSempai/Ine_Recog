@@ -6,11 +6,13 @@ from fastapi import FastAPI, File, UploadFile, responses
 from fastapi.responses import FileResponse
 from recognition.idRecognition import idRecognition
 from extras.tags import listOfTag
-from extras.struct import logCarless, deleteLog, tagRange, kibanaLog, carList
+from extras.struct import logCarless, deleteLog, tagRange, kibanaLog, carList, persona
 from logs.logs import logCarLess, saveCsv
 import os
 import json
 import _thread
+from scripts.consult import saveFace
+from scripts.paths import createIDPath
 
 
 app = FastAPI()
@@ -109,6 +111,14 @@ def returnJS():
         data = json.load(file)
 
     return data
+
+
+@app.post("/getphoto/")
+def getCredential(cve: persona):
+    date = saveFace(cve.cve)
+    path = createIDPath(cve.cve, date)
+    print(path)
+    return responses.FileResponse(path)
 
 
 @app.post("/polarea")
