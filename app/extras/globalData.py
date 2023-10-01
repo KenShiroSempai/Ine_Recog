@@ -34,7 +34,7 @@ KEEPPERCENTS = [2000, 2250, 2500]
 DATABASE CREDENTIALS
 '''
 NAME = 'avispa'
-HOST = '192.168.100.8'
+HOST = '192.168.2.202'
 # HOST = '192.168.100.216'
 USER = 'postgres'
 PSSW = 'mfmssmcl'
