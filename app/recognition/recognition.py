@@ -76,13 +76,13 @@ def extractT(aligned, point1, point2):
     # cv2.rectangle(aligned, point1, point2, RED)
     # cv2.imwrite('Roi.jpg', rgb)
     ocr_result = reader.readtext(rgb)
-    text = removeLabel(ocr_result)
+    text = removeLabel(ocr_result, roi)
     return text, aligned
 
 
-def removeLabel(ocr_result):
+def removeLabel(ocr_result, roi):
     bigger = 0
-    scale = (7/9)
+    scale = (6/9)
     text = []
     for result in ocr_result:
         height = np.sum(np.subtract(result[0][2], result[0][1]))
