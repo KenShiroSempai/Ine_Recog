@@ -26,6 +26,6 @@ TEMPLATES = {'template_0.jpeg': [(499, 413), (784, 462), (300, 160), (665, 294)]
 TEMPLATE_NAME = {'INE': ['template_0.jpeg', 'ine0.jpeg'], 'INE_2021': [
     'ine1.1.jpeg', 'ine1.jpeg'], 'IFE': ['ife.jpeg'], 'LIC': ['lic.jpeg'], 'LIC EdoMex': ['edoMex0.jpg', 'edoMex.jpg', 'edoMex1.jpg']}
 NAMEBLACKLIST = ['NOMBRE', 'NONBRE', 'NCMPRE', 'NOMBREIS', 'ACELUOO', 'PATEANO', 'APELUDO', 'MATEANO:',
-                 'APELLIDO', 'PATERNO', 'MATERNO', 'PATEHNO', 'MATEANO', 'MAIEANO', 'NOVARE(S}', 'PATEHNO:', 'NOMBREIS):']
+                 'APELLIDO', 'PATERNO', 'MATERNO', 'PATEHNO', 'MATEANO', 'MAIEANO', 'NOVARE(S}', 'PATEHNO:', 'NOMBREIS):', 'DEL']
 CVEBLACKLIST = ['ELECTOR', 'RFC', 'CURP', 'CLAVE', 'CLAVE DE ELECTOR', 'CUAP']
 KEEPPERCENTS = [2000, 2250, 2500]
