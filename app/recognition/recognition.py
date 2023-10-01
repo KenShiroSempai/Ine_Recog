@@ -74,7 +74,7 @@ def extractT(aligned, point1, point2):
     ]
     rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
     # cv2.rectangle(aligned, point1, point2, RED)
-    cv2.imwrite('Roi.jpg', rgb)
+    # cv2.imwrite('Roi.jpg', rgb)
     ocr_result = reader.readtext(rgb)
     text = removeLabel(ocr_result)
     return text, aligned

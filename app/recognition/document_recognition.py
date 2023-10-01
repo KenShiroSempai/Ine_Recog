@@ -1,10 +1,10 @@
 import cv2
-from extras.globalData import KEEPPERCENTS, IMGPATH, TEMPLATE, TEMPLATES, NAMEBLACKLIST, CVEBLACKLIST
+from extras.globalData import KEEPPERCENTS, IMGPATH, TEMPLATE, TEMPLATES, NAMEBLACKLIST, CVEBLACKLIST, TEMPLATE_NAME
 from scripts.paths import createDatePath
 from recognition.recognition import imageAlignment, extractT
 import re
 from datetime import datetime
-# import base64
+import base64
 
 
 def idRecognition(img, name):
@@ -83,28 +83,32 @@ def filterCve(cve, pat):
     return newCve
 
 
-def makeResponse(name, cve, doc, img, camName):
-    # retval, buffer = cv2.imencode('.jpg', img)
-    # jpg_as_text = base64.b64encode(buffer)
+def makeResponse(name, cve, doc, img):
+    retval, buffer = cv2.imencode('.jpg', img)
+    jpg_as_text = base64.b64encode(buffer)
     names = ""
     filename = createDatePath(
         IMGPATH) + (str((datetime.timestamp(datetime.now()))))+'.jpg'
     cv2.imwrite(filename, img)
     for aux in name[2:len(name)]:
         names += (aux + " ")
+    for each in TEMPLATE_NAME:
+        if doc in TEMPLATE_NAME[each]:
+            doc = each
+            break
     res = {'paterno': name[0],
            'materno': name[1],
            'nombre': names,
            'filename': filename,
            'clave': cve,
-           # 'photoBase64':str(jpg_as_text),
+           'photoBase64': str(jpg_as_text),
            'documento': doc}
     return res
 
 
 def makeBlanckREsponse(img, camName):
-    # retval, buffer = cv2.imencode('.jpg', img)
-    # jpg_as_text = base64.b64encode(buffer)
+    retval, buffer = cv2.imencode('.jpg', img)
+    jpg_as_text = base64.b64encode(buffer)
     filename = createDatePath(
         IMGPATH) + (str((datetime.timestamp(datetime.now()))))+'.jpg'
     cv2.imwrite(filename, img)
@@ -113,8 +117,8 @@ def makeBlanckREsponse(img, camName):
            'nombre': '',
            'filename': filename,
            'clave': '',
-                    # 'photoBase64': str(jpg_as_text),
-                    'documento': ''}
+           'photoBase64': str(jpg_as_text),
+           'documento': 'SIN IDENTIFICAR'}
     return res
 
 

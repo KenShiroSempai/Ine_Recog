@@ -3,14 +3,15 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import status
 from scripts.paths import createDatePath, logRecognition
-from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST, KEEPPERCENTS
+from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST, KEEPPERCENTS, TEMPLATE_NAME
 from recognition.recognition import imageAlignment, extractT
 import cv2
 import re
+import json
 
 
 def idRecognition(file):
-    filename = None
+    response = None
     content = file.file.read()
     # if (file.content_type[:5] != 'image'):
     #     res = {
@@ -24,30 +25,30 @@ def idRecognition(file):
     nparr = np.frombuffer(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     for keep in KEEPPERCENTS:
-        if filename:
-            continue
+        if response is not None:
+            break
         print(keep)
-        filename, response = recognitionMiddle(img, keep)
+        response = recognitionMiddle(img, keep)
 
-    if not filename:
+    if response is None:
         filename = "error.jpg"
+    else:
+        filename = (json.loads(response.body.decode("utf-8")))['filename']
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
-    open('imgAPI/0.jpg', 'wb').write(content)
     return response
 
 
 def recognitionMiddle(img, keep):
     response = None
-    filename = None
     for template in TEMPLATES:
         if response is not None:
-            continue
+            break
         points_list = TEMPLATES[template]
         img_template = cv2.imread(TEMPLATE + template)
         aligned, matchedVis = imageAlignment(
             image=img, template=img_template, maxFeatures=keep)
-        cv2.imwrite("imgAPI/1.jpg", aligned)
-        cv2.imwrite('imgAPI/3.jpg', matchedVis)
+        # cv2.imwrite("imgAPI/1.jpg", aligned)
+        # cv2.imwrite('imgAPI/3.jpg', matchedVis)
         name, image = extractT(
             aligned,
             points_list[2],
@@ -61,15 +62,14 @@ def recognitionMiddle(img, keep):
             points_list[0],
             points_list[1]
         )
-        cv2.imwrite('imgAPI/2.jpg', finalImage)
+        # cv2.imwrite('imgAPI/2.jpg', finalImage)
         if (len(cve) == 0):
             continue
         cve = filterCve(cve, name[0])
-        if (len(name) > 0 and len(cve) > 0):
-            filename, response = makeResponse(name, cve, template)
-    if not response:
-        response = False
-    return filename, response
+        if (len(name) > 0 and len(cve) > 8):
+            response = makeResponse(
+                name, cve, template)
+    return response
 
 
 def filterName(name, doc):
@@ -83,8 +83,6 @@ def filterName(name, doc):
     for tmp in name:
         for tmp2 in tmp.split():
             newName.append(preprocess_ocr_output(tmp2).upper())
-    # tmpName = [ele for ele in newName if ele not in NAMEBLACKLIST]
-    # tmpName = list((set(newName))-(set(NAMEBLACKLIST)))
     tmpName = [x for x in newName if x not in NAMEBLACKLIST]
     regex = re.compile(r'^NO+[A-Z]+RE$')
     filtered = [i for i in tmpName if ((not regex.match(i)))]
@@ -109,6 +107,10 @@ def makeResponse(name, cve, doc):
     names = ""
     for aux in name[2:len(name)]:
         names += (aux + " ")
+    for each in TEMPLATE_NAME:
+        if doc in TEMPLATE_NAME[each]:
+            doc = each
+            break
     res = {
         'paterno': name[0],
         'materno': name[1],
@@ -122,7 +124,7 @@ def makeResponse(name, cve, doc):
     response = JSONResponse(
         status_code=status.HTTP_200_OK, content=content)
     logRecognition(doc, name[0], name[1], names, cve, filename)
-    return filename, response
+    return response
 
 
 def preprocess_ocr_output(text: str) -> str:
