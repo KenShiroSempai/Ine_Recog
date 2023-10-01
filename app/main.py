@@ -115,8 +115,8 @@ def returnJS():
 
 @app.post("/getphoto/")
 def getCredential(cve: persona):
-    date = saveFace(cve.cve)
-    path = createIDPath(cve.cve, date)
+    date = saveFace(cve.persona)
+    path = createIDPath(cve.persona, date)
     print(path)
     return responses.FileResponse(path)
 
