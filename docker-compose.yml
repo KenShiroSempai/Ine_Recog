@@ -4,7 +4,7 @@ services:
     build: .
     command: uvicorn main:app --host 0.0.0.0
     ports:
-      - "4999:4999"
+      - "4999:8000"
     volumes:
         - ./app/:/app/
         - /mnt/disk2/fotosID:/app/img
