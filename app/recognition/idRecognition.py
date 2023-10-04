@@ -1,7 +1,4 @@
 import numpy as np
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-from fastapi import status
 from scripts.paths import createDatePath, logRecognition
 from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBLACKLIST, KEEPPERCENTS, TEMPLATE_NAME
 from recognition.recognition import imageAlignment, extractT
@@ -24,17 +21,22 @@ def idRecognition(file):
     #     return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content)
     nparr = np.frombuffer(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    for keep in KEEPPERCENTS:
-        if response is not None:
-            break
-        print(keep)
-        response = recognitionMiddle(img, keep)
-
+    response = bitRecognition(img)
     if response is None:
         filename = "error.jpg"
     else:
         filename = (json.loads(response.body.decode("utf-8")))['filename']
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
+    return response
+
+
+def bitRecognition(img):
+    response = None
+    for keep in KEEPPERCENTS:
+        if response is not None:
+            break
+        print(keep)
+        response = recognitionMiddle(img, keep)
     return response
 
 
@@ -120,12 +122,8 @@ def makeResponse(name, cve, doc):
         'clave': cve,
         'documento': doc
     }
-    print(res)
-    content = jsonable_encoder(res)
-    response = JSONResponse(
-        status_code=status.HTTP_200_OK, content=content)
     logRecognition(doc, name[0], name[1], names, cve, filename)
-    return response
+    return res
 
 
 def preprocess_ocr_output(text: str) -> str:

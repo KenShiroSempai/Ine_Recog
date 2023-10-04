@@ -1,5 +1,5 @@
 import os
-from extras.globalData import LOGPATH, IMGPATH, DEFAULID
+from extras.globalData import LOGPATH, IMGPATH, DEFAULID, BITPATH
 from csv import writer
 from datetime import datetime
 import fnmatch
@@ -70,3 +70,4 @@ def find(pattern, path):
 
 
 createPath(LOGPATH)
+createPath(BITPATH)

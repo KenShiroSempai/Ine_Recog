@@ -19,6 +19,7 @@ app = FastAPI()
 
 
 @app.post("/logcarless")
+# @app.post("/careal")
 def logGral(item: logCarless):
     _thread.start_new_thread(logCarLess, (item.building, item.floor, item.idCArd,
                              item.face, item.conjunto, item.autorizo, item.guard, item.origen, item.reason))
@@ -96,6 +97,7 @@ def returnTags(item: tagRange):
 
 
 @app.get("/adentro/")
+# @app.get("/insideReal/")
 def returnJS():
     """Borrar Qr generado.
 

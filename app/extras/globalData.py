@@ -4,6 +4,7 @@ GLOBAL PATHS
 IMGPATH = 'img/'
 LOGPATH = IMGPATH + 'log/'
 SUCCESSPATH = IMGPATH + 'success/'
+BITPATH = 'Bitacora/'
 FAILPATH = IMGPATH + 'fail/'
 FILEPATH = IMGPATH + 'file/'
 DEFAULID = 'templates/empty.jpg'
@@ -39,3 +40,9 @@ HOST = '192.168.2.202'
 USER = 'postgres'
 PSSW = 'mfmssmcl'
 PORT = '5432'
+'''
+VALUES DEFAUL
+'''
+NOTD = 'No Disponible'
+RECOGFAIL = "EMPTY"
+DATAFILE = 'Bitacora/data.json'

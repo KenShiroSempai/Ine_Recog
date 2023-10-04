@@ -1,119 +1,78 @@
 import time
 import os
-from recognition.ine import idk
 from extras.struct import kibanaLog
-from base64 import b64decode
-import cv2
 from csv import writer
 import json
 from datetime import datetime
-from extras.globalData import LOGPATH
+from extras.globalData import LOGPATH, NOTD, RECOGFAIL, DATAFILE, BITPATH
+from scripts.paths import createPath, createDatePath
+from recognition.idRecognition import bitRecognition
+from scripts.base64 import base64toOpenCV, writeB64
 
 
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
     data = {}
-    filename = 'Bitacora/data.json'
-    lista = []
-    pathDefault = "imgAPI/0.jpg"
-    year = time.strftime("%Y")
-    mont = time.strftime("%m")
     day = time.strftime("%d")
     timeMin = time.strftime("%H%M%S") + " "+reason
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    newPath = "Bitacora/"+conjunto
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-
-    with open(pathDefault, "wb") as f:
-        f.write(b64decode(idCArd))
-        f.close()
-    aux, op = idk(pathDefault)
-    if not op:
-        aux["clave"] = timestamp
-        aux["nombre"] = "EMPTY"
-        aux["paterno"] = "EMPTY"
-        name = timestamp + ".jpg"
-        cv2.imwrite("img/fail/"+timestamp + ".jpg",
-                    cv2.imread("imgAPI/0.jpg"))
-    else:
-        name = aux["name"]
-    newPath = "Bitacora/" + conjunto
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+building
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath + "/"+floor
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    plate = "No Disponible"
-    make = "No Disponible"
-    m = "No Disponible"
-    color = "No Disponible"
-    idPath = "/" + "idCard" + "_" + name + ".jpg"
-    facePath = "/" + "face" + "_" + name + ".jpg"
-    carPath = "/" + "car" + "_" + name + ".jpg"
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+year
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+mont
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+day
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    newPath = newPath+"/"+timeMin
-    if not (os.path.exists(newPath)):
-        os.mkdir(newPath)
-    carPath = newPath + carPath
-    with open(newPath + idPath, "wb") as f:
-        f.write(b64decode(idCArd))
-    with open(newPath + facePath, "wb") as f:
-        f.write(b64decode(face))
-    lista.extend([origen, conjunto, building, floor, str(timestamp), autorizo, aux["nombre"], idPath,
-                 facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"])
-    with open("Bitacora/" + conjunto+"/" + 'log.csv', 'a') as f_object:
-        writer_object = writer(f_object)
-        writer_object.writerow(lista)
-        f_object.close()
-    if os.path.exists(filename):
-        with open(filename, "r") as file:
+    newPath = BITPATH+conjunto
+    createPath(newPath)
+    # declaraciones
+    id_img = base64toOpenCV(idCArd)
+    js = bitRecognition(id_img)
+    print(js)
+    if js is None:
+        js = jsonFail(timestamp)
+    cve = js["clave"]
+    newPath = BITPATH + conjunto+"/"+building + "/"+floor + '/'
+    createPath(newPath)
+    plate = make = m = color = NOTD
+    idPath = "_" + "idCard" + "_" + cve + ".jpg"
+    facePath = "_" + "face" + "_" + cve + ".jpg"
+    newPath = createDatePath(newPath)
+    writeB64(path=newPath + idPath, data=idCArd)
+    writeB64(path=newPath + facePath, data=face)
+    lista2 = [origen, conjunto, building, floor, str(timestamp), autorizo, js["nombre"], idPath,
+              facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"]
+    writeCsv(filename=BITPATH + conjunto+"/" + 'log.csv', data=lista2)
+    if os.path.exists(DATAFILE):
+        with open(DATAFILE, "r") as file:
             data = json.load(file)
-    if conjunto not in data:
-        data[conjunto] = {}
-    if building not in data[conjunto]:
-        data[conjunto][building] = {}
-    if floor not in data[conjunto][building]:
-        data[conjunto][building][floor] = {}
-    if day not in data[conjunto][building][floor]:
-        data[conjunto][building][floor][day] = {}
-    if timeMin not in data[conjunto][building][floor][day]:
-        data[conjunto][building][floor][day][timeMin] = {"marca": make,
-                                                         "origen": origen,
-                                                         "time": str(timestamp),
-                                                         "autorizo": autorizo,
-                                                         "name": aux["nombre"] + aux["paterno"],
-                                                         "model": m,
-                                                         "guardia": guardia,
-                                                         "motivo": reason
-                                                         }
+    res = {"marca": make,
+           "origen": origen,
+           "time": str(timestamp),
+           "autorizo": autorizo,
+           "name": js["nombre"] + js["paterno"],
+           "model": m,
+           "guardia": guardia,
+           "motivo": reason
+           }
+    data.update({conjunto: {building: {floor: {day: {timeMin: res}}}}})
     jss = json.dumps(data)
-    f = open(filename, "w")
+    f = open(DATAFILE, "w")
     f.write(jss)
     f.close()
 
 
 def saveCsv(item: kibanaLog):
-    lista = []
-    lista.extend([item.origen, item.conjunto, item.building, item.floor, item.timestamp, item.autorizo, item.name, item.idPath,
-                 item.facePath, item.plate, item.make, item.model, item.color, item.guardia, item.tag, item.preauth])
-    with open("Bitacora/" + item.conjunto+"/" + 'log.csv', 'a') as f_object:
+    lista = [item.origen, item.conjunto, item.building, item.floor, item.timestamp, item.autorizo, item.name, item.idPath,
+             item.facePath, item.plate, item.make, item.model, item.color, item.guardia, item.tag, item.preauth]
+    writeCsv(filename="Bitacora/" + item.conjunto+"/" + 'log.csv', data=lista)
+
+
+def writeCsv(filename, data):
+    with open(filename, 'a') as f_object:
         writer_object = writer(f_object)
-        writer_object.writerow(lista)
+        writer_object.writerow(data)
         f_object.close()
-    print("webos")
+
+
+def jsonFail(timestamp) -> dict:
+    js = {}
+    js["clave"] = timestamp
+    js["nombre"] = js["paterno"] = js['materno'] = js['documento'] = RECOGFAIL
+    js['filename'] = timestamp + ".jpg"
+    return js
 
 
 def logExeption(e, fun):
