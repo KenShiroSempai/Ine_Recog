@@ -4,13 +4,12 @@ services:
     build: .
     command: uvicorn main:app --host 0.0.0.0
     ports:
-      - "4999:8000"
+      - "4999:4999"
     volumes:
         - ./app/:/app/
-        - /mnt/4tb/fotosID:/app/img
-        - /mnt/4tb/samba/files/tagsRefrendo:/app/tag
-        - /mnt/4tb/bitacoraIO:/app/Enramada
-        - /mnt/4tb/bitacoraIO:/app/Bitacora
+        - /mnt/disk2/fotosID:/app/img
+        - /mnt/disk2/samba/files/tagsRefrendo:/app/tag
+        - /mnt/disk2/bitacoraIO:/app/Bitacora
     restart: always
     environment:
       - TZ=America/Mexico_City
