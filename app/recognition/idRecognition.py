@@ -4,8 +4,6 @@ from extras.globalData import IMGPATH, TEMPLATES, TEMPLATE, NAMEBLACKLIST, CVEBL
 from recognition.recognition import imageAlignment, extractT
 import cv2
 import re
-import json
-
 
 def idRecognition(file):
     response = None
@@ -25,7 +23,7 @@ def idRecognition(file):
     if response is None:
         filename = "error.jpg"
     else:
-        filename = (json.loads(response.body.decode("utf-8")))['filename']
+        filename = response['filename']
     open(createDatePath(IMGPATH) + filename, 'wb').write(content)
     return response
 
