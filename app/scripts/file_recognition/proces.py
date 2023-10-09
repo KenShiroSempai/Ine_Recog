@@ -62,7 +62,7 @@ def from_post(file):
     #     return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content)
     nparr = np.frombuffer(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    cv2.imwrite('init.jpg', img)
+    # cv2.imwrite('init.jpg', img)
     response = proces_image(img)
     if response is None:
         response = False
