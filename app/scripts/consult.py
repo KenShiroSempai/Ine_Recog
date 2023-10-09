@@ -1,5 +1,5 @@
 import psycopg2
-from extras.globalData import NAME, HOST, USER, PSSW, PORT
+from extras.const import NAME, HOST, USER, PSSW, PORT
 from logs.logs import logExeption
 
 

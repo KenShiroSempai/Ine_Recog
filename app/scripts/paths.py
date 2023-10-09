@@ -1,5 +1,5 @@
 import os
-from extras.globalData import LOGPATH, IMGPATH, DEFAULID, BITPATH
+from extras.const import LOGPATH, IMGPATH, DEFAULID, BITPATH
 from csv import writer
 from datetime import datetime
 import fnmatch

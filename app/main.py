@@ -2,9 +2,8 @@
 
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
-from fastapi import FastAPI, File, UploadFile, responses
+from fastapi import FastAPI, File, UploadFile, responses, Request
 from fastapi.responses import FileResponse
-from recognition.idRecognition import idRecognition
 from extras.tags import listOfTag
 from extras.struct import logCarless, deleteLog, tagRange, kibanaLog, carList, persona
 from logs.logs import logCarLess, saveCsv
@@ -13,13 +12,14 @@ import json
 import _thread
 from scripts.consult import saveFace
 from scripts.paths import createIDPath
+from scripts.file_recognition.proces import from_post
+from extras.const import INSIDE, SALIDA, CARLESS
 
 
 app = FastAPI()
 
 
 @app.post("/logcarless")
-# @app.post("/careal")
 def logGral(item: logCarless):
     _thread.start_new_thread(logCarLess, (item.building, item.floor, item.idCArd,
                              item.face, item.conjunto, item.autorizo, item.guard, item.origen, item.reason))
@@ -65,7 +65,17 @@ def subir_identification(file: UploadFile = File(...)):
     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
     los datos de la Identificacion.
     """
-    return idRecognition(file)
+    return from_post(file)
+
+
+# @app.post("/recognition")
+# def recog_identification(file: UploadFile = File(...)):
+#     """Subir identificaciones.
+
+#     En esta ruta vamos a recibir las identificaciones y retorna un JSON con
+#     los datos de la Identificacion.
+#     """
+#     return from_post(file)
 
 
 @app.get("/img/{photo}")
@@ -96,8 +106,21 @@ def returnTags(item: tagRange):
     return FileResponse("Bitacora/tag.txt", headers=headers)
 
 
-@app.get("/adentro/")
-# @app.get("/insideReal/")
+@app.middleware('http')
+async def some_middleware(request: Request, call_next):
+    if request.url.path in INSIDE:
+        request.scope['path'] = '/adentro'
+    if request.url.path in SALIDA:
+        request.scope['path'] = '/ppOut'
+    if request.url.path in CARLESS:
+        request.scope['path'] = '/logcarless'
+    headers = dict(request.scope['headers'])
+    # headers[b'custom-header'] = b'my custom header'
+    request.scope['headers'] = [(k, v) for k, v in headers.items()]
+    return await call_next(request)
+
+
+@app.get("/adentro")
 def returnJS():
     """Borrar Qr generado.
 

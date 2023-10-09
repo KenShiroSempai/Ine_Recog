@@ -4,9 +4,9 @@ from extras.struct import kibanaLog
 from csv import writer
 import json
 from datetime import datetime
-from extras.globalData import LOGPATH, NOTD, RECOGFAIL, DATAFILE, BITPATH
+from extras.const import LOGPATH, NOTD, RECOGFAIL, DATAFILE, BITPATH
 from scripts.paths import createPath, createDatePath
-from recognition.idRecognition import bitRecognition
+from scripts.file_recognition.proces import proces_image
 from scripts.base64 import base64toOpenCV, writeB64
 
 
@@ -19,7 +19,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     createPath(newPath)
     # declaraciones
     id_img = base64toOpenCV(idCArd)
-    js = bitRecognition(id_img)
+    js = proces_image(id_img)
     print(js)
     if js is None:
         js = jsonFail(timestamp)
