@@ -56,7 +56,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
             z[key].append(value)
     jss = json.dumps(z)
     f = open(DATAFILE, "w")
-    f.write(jss)
+    f.write(z)
     f.close()
 
 
