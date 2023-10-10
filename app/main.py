@@ -109,7 +109,7 @@ def returnTags(item: tagRange):
 @app.middleware('http')
 async def some_middleware(request: Request, call_next):
     if request.url.path in INSIDE:
-        request.scope['path'] = '/adentro'
+        request.scope['path'] = '/adentro/'
     if request.url.path in SALIDA:
         request.scope['path'] = '/ppOut'
     if request.url.path in CARLESS:
@@ -120,7 +120,7 @@ async def some_middleware(request: Request, call_next):
     return await call_next(request)
 
 
-@app.get("/adentro")
+@app.get("/adentro/")
 def returnJS():
     """Borrar Qr generado.
 
