@@ -54,9 +54,9 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     for d in (data, res2):  # you can list as many input dicts as you want here
         for key, value in d.items():
             z[key].append(value)
-    jss = json.dumps(z)
+    jss = json.loads(z)
     f = open(DATAFILE, "w")
-    f.write(str(z))
+    f.write(str(jss))
     f.close()
 
 
