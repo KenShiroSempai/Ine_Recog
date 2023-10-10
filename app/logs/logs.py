@@ -8,6 +8,7 @@ from extras.const import LOGPATH, NOTD, RECOGFAIL, DATAFILE, BITPATH
 from scripts.paths import createPath, createDatePath
 from scripts.file_recognition.proces import proces_image
 from scripts.base64 import base64toOpenCV, writeB64
+from collections import defaultdict
 
 
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
@@ -48,8 +49,11 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
            "motivo": reason
            }
     res2 = {conjunto: {building: {floor: {day: {timeMin: res}}}}}
-    z = {x: data.get(x, 0) + res2.get(x, 0)
-         for x in set(data).union(res2)}
+    z = defaultdict(list)
+
+    for d in (data, res2):  # you can list as many input dicts as you want here
+        for key, value in d.items():
+            z[key].append(value)
     jss = json.dumps(z)
     f = open(DATAFILE, "w")
     f.write(jss)
