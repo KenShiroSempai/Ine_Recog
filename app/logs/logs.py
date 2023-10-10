@@ -56,7 +56,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
             z[key].append(value)
     jss = dict(z)
     f = open(DATAFILE, "w")
-    f.write(str(jss))
+    f.write(str(jss).replace('[', '').replace(']', ''))
     f.close()
 
 
