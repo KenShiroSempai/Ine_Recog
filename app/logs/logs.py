@@ -13,7 +13,7 @@ from scripts.base64 import base64toOpenCV, writeB64
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
     data = {}
     day = time.strftime("%d")
-    timeMin = time.strftime("%H%M%S") + " "+reason
+    timeMin = time.strftime("%H%M%S")
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     newPath = BITPATH+conjunto
     createPath(newPath)
@@ -47,8 +47,9 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
            "guardia": guardia,
            "motivo": reason
            }
-    data.update({conjunto: {building: {floor: {day: {timeMin: res}}}}})
-    jss = json.dumps(data)
+    res2 = {conjunto: {building: {floor: {day: {timeMin: res}}}}}
+    z = dict(list(data.items()) + list(res2.items()))
+    jss = json.dumps(z)
     f = open(DATAFILE, "w")
     f.write(jss)
     f.close()
