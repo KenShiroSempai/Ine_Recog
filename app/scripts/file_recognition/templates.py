@@ -63,7 +63,7 @@ def procesAligned(aligned, template):
         points_list[0],
         points_list[1]
     )
-    cv2.imwrite('final.jpg', finalImage)
+    # cv2.imwrite('final.jpg', finalImage)
     # if (len(cve) == 0):
     #     continue
     cve = filterCve(cve, name[0])
