@@ -48,7 +48,10 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
            "motivo": reason
            }
     res2 = {conjunto: {building: {floor: {day: {timeMin: res}}}}}
-    z = data + res2
+    z = dict(data.items() + res2.items() +
+             [(k, data[k] + res2[k])
+              for k in set(res2)
+              & set(data)])
     jss = json.dumps(z)
     f = open(DATAFILE, "w")
     f.write(jss)
