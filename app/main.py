@@ -13,7 +13,7 @@ import _thread
 from scripts.consult import saveFace
 from scripts.paths import createIDPath
 from scripts.file_recognition.proces import from_post
-from extras.const import INSIDE, SALIDA, CARLESS
+from extras.const import MIDDLEWARE
 
 
 app = FastAPI()
@@ -108,12 +108,10 @@ def returnTags(item: tagRange):
 
 @app.middleware('http')
 async def some_middleware(request: Request, call_next):
-    if request.url.path in INSIDE:
-        request.scope['path'] = '/adentro/'
-    if request.url.path in SALIDA:
-        request.scope['path'] = '/ppOut'
-    if request.url.path in CARLESS:
-        request.scope['path'] = '/logcarless'
+    if request.url.path in MIDDLEWARE:
+        request.scope['path'] = MIDDLEWARE[request.url.path]
+    else:
+        request.scope['path'] = request.url.path
     headers = dict(request.scope['headers'])
     # headers[b'custom-header'] = b'my custom header'
     request.scope['headers'] = [(k, v) for k, v in headers.items()]

@@ -51,6 +51,11 @@ DATAFILE = 'Bitacora/data.json'
 MAXFEATURES = 2000
 KEEPPERCENT = .2
 
-INSIDE = ['/insideReal/', '/insideReal']
-SALIDA = ['/salidaReal', '/salidaReal/']
-CARLESS = ['/careal', '/careal/']
+MIDDLEWARE = {
+    '/insideReal/': '/adentro/',
+    '/insideReal': '/adentro/',
+    '/salidaReal': '/ppOut',
+    '/salidaReal/': '/ppOut',
+    '/careal': '/logcarless',
+    '/careal/': '/logcarless'
+}
