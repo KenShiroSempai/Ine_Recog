@@ -1,5 +1,5 @@
 def merge_dict(json0, json1):
-    res = {}
+    res = json0
     for each in json0.keys():
         for key in json1.keys():
             if each == key:
