@@ -6,9 +6,9 @@ import json
 from datetime import datetime
 from extras.const import LOGPATH, NOTD, RECOGFAIL, DATAFILE, BITPATH
 from scripts.paths import createPath, createDatePath
+from scripts.proces_data import merge_dict
 from scripts.file_recognition.proces import proces_image
 from scripts.base64 import base64toOpenCV, writeB64
-from collections import defaultdict
 
 
 def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, origen, reason):
@@ -37,8 +37,11 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
               facePath, plate.upper(), make, m, color, guardia, "FALTA DE ANTENA/HANDHELD", "FALSE"]
     writeCsv(filename=BITPATH + conjunto+"/" + 'log.csv', data=lista2)
     if os.path.exists(DATAFILE):
-        with open(DATAFILE, "r") as file:
-            data = json.load(file)
+        try:
+            with open(DATAFILE, "r") as file:
+                data = json.load(file)
+        except Exception:
+            data = {}
     res = {"marca": make,
            "origen": origen,
            "time": str(timestamp),
@@ -49,14 +52,10 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
            "motivo": reason
            }
     res2 = {conjunto: {building: {floor: {day: {timeMin: res}}}}}
-    z = defaultdict(list)
-
-    for d in (data, res2):  # you can list as many input dicts as you want here
-        for key, value in d.items():
-            z[key].append(value)
-    jss = json.dumps(dict(z))
+    z = merge_dict(res2, data)
+    jss = json.dumps(z)
     f = open(DATAFILE, "w")
-    f.write(str(jss).replace('[', '').replace(']', ''))
+    f.write(str(jss))
     f.close()
 
 
