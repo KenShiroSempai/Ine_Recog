@@ -7,6 +7,6 @@ def merge_dict(json0, json1):
             if each == key:
                 res.update({key: merge_dict(json0[key], json1[key])})
             else:
-                res.update({key: json1[key]})
+                res.update({each: json0[each]})
     print(res)
     return res
