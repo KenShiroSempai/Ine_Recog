@@ -53,6 +53,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
            }
     res2 = {conjunto: {building: {floor: {day: {timeMin: res}}}}}
     z = merge_dict(res2, data)
+    print(z)
     jss = json.dumps(z)
     f = open(DATAFILE, "w")
     f.write(str(jss))
