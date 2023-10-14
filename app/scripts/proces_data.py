@@ -8,4 +8,5 @@ def merge_dict(json0, json1):
                 res.update({key: merge_dict(json0[key], json1[key])})
             else:
                 res.update({key: json1[key]})
+    print(res)
     return res
