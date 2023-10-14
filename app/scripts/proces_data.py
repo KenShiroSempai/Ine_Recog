@@ -1,9 +1,11 @@
 def merge_dict(json0, json1):
-    res = json0.copy()
-    for each in json0.keys():
+    res = {}
+    for each, in json0.keys():
+        if (len(json1.keys()) < 1):
+            res.update({each: json0[each]})
         for key in json1.keys():
             if each == key:
                 res.update({key: merge_dict(json0[key], json1[key])})
             else:
-                res.update({key: json1})
+                res.update({key: json1[key]})
     return res
