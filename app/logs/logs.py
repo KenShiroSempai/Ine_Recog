@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from extras.const import LOGPATH, NOTD, RECOGFAIL, DATAFILE, BITPATH
 from scripts.paths import createPath, createDatePath
-from scripts.proces_data import merge_dict
+from scripts.proces_data import merge_dict2
 from scripts.file_recognition.proces import proces_image
 from scripts.base64 import base64toOpenCV, writeB64
 
@@ -55,7 +55,7 @@ def logCarLess(building, floor, idCArd, face, conjunto, autorizo, guardia, orige
     print("###############")
     print(res2)
     print(data)
-    z = merge_dict(res2, data)
+    z = merge_dict2(res2, data)
     print(z)
     print("######################")
     jss = json.dumps(z)
