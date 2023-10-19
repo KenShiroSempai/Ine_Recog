@@ -14,6 +14,7 @@ from scripts.consult import saveFace
 from scripts.paths import createIDPath
 from scripts.file_recognition.proces import from_post
 from extras.const import MIDDLEWARE
+import base64
 
 
 app = FastAPI()
@@ -142,6 +143,16 @@ def getCredential(persona: persona):
     path = createIDPath(cve, date)
     print(path)
     return responses.FileResponse(path)
+
+
+@app.post("/getphoto2/")
+def getCredentialB64(persona: persona):
+    date, cve = saveFace(persona.persona)
+    path = createIDPath(cve, date)
+    print(path)
+    with open(path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    return encoded_string
 
 
 @app.post("/polarea")
