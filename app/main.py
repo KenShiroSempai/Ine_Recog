@@ -152,7 +152,7 @@ def getCredentialB64(persona: persona):
     print(path)
     with open(path, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
-    return encoded_string
+    return {'foto': encoded_string}
 
 
 @app.post("/polarea")
