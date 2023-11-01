@@ -25,7 +25,6 @@ def procesAligned(aligned, template):
         points_list[0],
         points_list[1]
     )
-    cv2.imwrite('imgAPI/1.jpg', finalImage)
     # if (len(cve) == 0):
     #     continue
     cve = filterCve(cve, name[0])

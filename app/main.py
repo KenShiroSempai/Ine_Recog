@@ -3,9 +3,7 @@
 Se cambio el uso de flask por FastAPI por motivos de eficiencia y docker
 """
 from fastapi import FastAPI, File, UploadFile, responses, Request
-from fastapi.responses import FileResponse
-from extras.tags import listOfTag
-from extras.struct import logCarless, deleteLog, tagRange, kibanaLog, carList, persona
+from extras.struct import logCarless, deleteLog, kibanaLog, carList, persona
 from logs.logs import logCarLess, saveCsv
 import os
 import json
@@ -95,16 +93,16 @@ def retorna_Img(photo):
     return {"error": "malasolicitud"}
 
 
-@app.get("/tags", response_class=FileResponse)
-def returnTags(item: tagRange):
-    """Loop Tags
+# @app.get("/tags", response_class=FileResponse)
+# def returnTags(item: tagRange):
+#     """Loop Tags
 
-    Ingresas inicio y fin de el rango que quieres obtener y te
-    retorna el archivo
-    """
-    headers = {'Content-Disposition': 'attachment; filename="Book.xlsx"'}
-    listOfTag(item.ini, item.fin)
-    return FileResponse("Bitacora/tag.txt", headers=headers)
+#     Ingresas inicio y fin de el rango que quieres obtener y te
+#     retorna el archivo
+#     """
+#     headers = {'Content-Disposition': 'attachment; filename="Book.xlsx"'}
+#     listOfTag(item.ini, item.fin)
+#     return FileResponse("Bitacora/tag.txt", headers=headers)
 
 
 @app.middleware('http')

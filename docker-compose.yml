@@ -8,7 +8,6 @@ services:
     volumes:
         - ./app/:/app/
         - /mnt/4tb/fotosID:/app/img
-        - /mnt/4tb/samba/files/tagsRefrendo:/app/tag
         - /mnt/4tb/bitacoraIO:/app/Bitacora
     restart: always
     environment:

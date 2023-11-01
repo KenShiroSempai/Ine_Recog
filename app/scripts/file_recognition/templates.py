@@ -79,6 +79,7 @@ def proces_obs_list(templates, image):
         print(template[1])
         aligned = imageAlignment(image, template, matches, kps)
         if response is not None:
+            cv2.imwrite('imgAPI/1.jpg', aligned)
             break
         response = procesAligned(aligned, template[1])
     return response
