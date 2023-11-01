@@ -91,7 +91,7 @@ def retorna_Img(photo):
     except Exception as ex:
         return {"error": ex.args}
     if ((num < 4) and (num > -1)):
-        return responses.FileResponse(f"imgAPI/{photo}.jpg")
+        return responses.FileResponse(f"img/{photo}.jpg")
     return {"error": "malasolicitud"}
 
 
