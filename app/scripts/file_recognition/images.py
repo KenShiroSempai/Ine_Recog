@@ -21,5 +21,5 @@ def imageAlignment(image, template, matches, kps):
     (h, w) = template[0].shape[:2]
     aligned = cv2.warpPerspective(image, H, (w, h))
     aligned = imutils.resize(aligned, width=2000)
-    # cv2.imwrite('aligned.png', aligned)
+    cv2.imwrite('img/3.jpg', aligned)
     return aligned
