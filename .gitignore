@@ -3,6 +3,6 @@ __pycache__/
 app/__pycache__/
 app/recognition/__pycache__/
 app/Bitacora/data.json
-# app/imgAPI
+app/imgAPI
 app/img
 app/Bitacora
