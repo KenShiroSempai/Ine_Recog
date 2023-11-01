@@ -25,7 +25,7 @@ def procesAligned(aligned, template):
         points_list[0],
         points_list[1]
     )
-    cv2.imwrite('img/1.jpg', finalImage)
+    cv2.imwrite('imgAPI/1.jpg', finalImage)
     # if (len(cve) == 0):
     #     continue
     cve = filterCve(cve, name[0])
@@ -57,7 +57,7 @@ def from_post(file):
     #         'content_type': file.content_type,
     #         'file Name': file.filename
     #     }
-    open('img/0.jpg', 'wb').write(content)
+    open('imgAPI/0.jpg', 'wb').write(content)
     #     content = jsonable_encoder(res)
     #     return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=content)
     nparr = np.frombuffer(content, np.uint8)
