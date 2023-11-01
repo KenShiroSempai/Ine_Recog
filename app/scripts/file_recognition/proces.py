@@ -27,6 +27,7 @@ def procesAligned(aligned, template):
     )
     # if (len(cve) == 0):
     #     continue
+    cv2.imwrite('imgAPI/2.jpg', finalImage)
     cve = filterCve(cve, name[0])
     if (len(name) > 1 and len(cve) > 8):
         response = makeResponse(
