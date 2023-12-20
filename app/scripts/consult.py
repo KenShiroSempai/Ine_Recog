@@ -1,6 +1,6 @@
 import psycopg2
 from extras.const import NAME, HOST, USER, PSSW, PORT
-from logs.logs import logExeption
+from app.scripts.logs import logExeption
 
 
 def connect():
